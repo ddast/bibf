@@ -9,12 +9,23 @@
 #include <boost/program_options.hpp>
 #include <vector>
 #include <string>
+#include <sstream>
 
 namespace po = boost::program_options;
 
 using std::cout;
 using std::cerr;
 using std::endl;
+
+std::vector<std::string> separate_string(std::string s)
+{
+  std::vector<std::string> result;
+  std::istringstream ss(s);
+  std::string word;
+  while (std::getline(ss, word, ','))
+    result.push_back(word);
+  return result;
+}
 
 int main(int argc, char* argv[])
 {
@@ -24,15 +35,16 @@ int main(int argc, char* argv[])
     visible.add_options()
       ("create-keys,c", "create keys using last name of first author plus last"
         " two digits of the year plus [a,b,c...]")
-      ("only,O", po::value< std::vector<std::string> >(),
-        "print only the given field; apply option various times for more"
-        " than one field")
-      ("sort-bib,s", po::value< std::vector<std::string> >(), 
+      ("only,O", po::value<std::string>(),
+        "print only the given fields;"
+        " different fields must be separated by commas")
+      ("sort-bib,s", po::value<std::string>(), 
         "sorts the bibliography by the given citeria; valid values are 'type',"
         " 'key', 'firstauthor' and every string used as field identifier;"
-        " apply option various times for more than one sort criteria")
-      ("erase-field,e", po::value< std::vector< std::string> >(),
-        "erase the field in every entry; option may be applied multiple times")
+        " different values must be separated by commas")
+      ("erase-field,e", po::value<std::string>(),
+        "erase the field in every entry;"
+        " use comma to apply more than one value")
       ("show-missing,m", po::value<char>()->implicit_value('R'),
         "show missing required fields and also missing optional fields with"
         " option O")
@@ -124,10 +136,12 @@ int main(int argc, char* argv[])
       bib.abbreviate_month();
 
     // erase fields
-    if (vm.count("erase-field"))
-      for (const std::string &erase
-          : vm["erase-field"].as< std::vector<std::string> >())
+    if (vm.count("erase-field")) {
+      std::vector<std::string> erase_vec =
+        separate_string(vm["erase-field"].as<std::string>());
+      for (const std::string &erase : erase_vec)
         bib.erase_field(erase);
+    }
 
     // create keys
     if (vm.count("create-keys"))
@@ -136,11 +150,7 @@ int main(int argc, char* argv[])
     // sort bibliography
     if (vm.count("sort-bib")) {
       std::vector<std::string> sort =
-        vm["sort-bib"].as< std::vector<std::string> >();
-      std::cout << sort.size() << "\n";
-      for (std::string &s : sort)
-        std::cout << s << "\n";
-      return 0;
+        separate_string( vm["sort-bib"].as<std::string>() );
       bib.sort_bib(vm["sort-bib"].as< std::vector<std::string> >());
     }
 
@@ -156,7 +166,7 @@ int main(int argc, char* argv[])
 
     // print only given fields
     if (vm.count("only"))
-      bib.print_bib(vm["only"].as< std::vector<std::string> >());
+      bib.print_bib( separate_string(vm["only"].as<std::string>()) );
 
     // standard action, print bib
     bib.print_bib();
