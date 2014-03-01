@@ -136,6 +136,9 @@ class Bibliography
     // Checks if the given string is a numerical value
     bool is_numerical(const std::string &s) const;
 
+    // Do some basic consistency checking
+    bool check_consistency() const;
+
 };
 
 #endif

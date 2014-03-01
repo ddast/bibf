@@ -236,6 +236,27 @@ void Bibliography::add_file(std::string file)
     std::cerr << "Unknown exception.\n";
     exit(1);
   }
+  // do a consistency check
+  check_consistency();
+}
+
+bool Bibliography::check_consistency() const
+{
+  // return true if the bibliography is consistent else false
+  bool is_consistent = true;
+
+  // check if every key is unique
+  for (auto it1 = bib.begin(), end = bib.end(); it1 != end-1; ++it1) {
+    for (auto it2 = it1+1; it2 != end; ++it2) {
+      if (it1->key == it2->key) {
+        std::cerr << "Warning: Key \"" << it1->key
+          << "\" defined more than once\n";
+        is_consistent = false;
+      }
+    }
+  }
+
+  return is_consistent;
 }
 
 string Bibliography::get_field_value(const bibEntry &bE, string field) const
