@@ -41,6 +41,9 @@ int main(int argc, char* argv[])
       ("show-missing,m", po::value<char>()->implicit_value('R'),
         "show missing required fields and also missing optional fields with"
         " option O")
+      ("missing-fields,M", po::value<std::string>(),
+        "show all entries that do not contain a specific field;"
+        " use commas to search for more than one field")
       ("change-case", po::value<char>(), "change the case of all field"
         " identifiers to lower (L) or upper (U) case")
       ("linebreak", po::value<unsigned int>(), "break lines after given"
@@ -154,6 +157,14 @@ int main(int argc, char* argv[])
       if (mode == 'O')
         only_required = false;
       bib.show_missing_fields(only_required);
+      return 0;
+    }
+
+    // show user defined missing fields
+    if (vm.count("missing-fields")) {
+      std::vector<std::string> fields =
+        separate_string( vm["missing-fields"].as<std::string>() );
+      bib.show_missing_fields(fields);
       return 0;
     }
 

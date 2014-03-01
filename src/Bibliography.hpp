@@ -4,7 +4,6 @@
  *       neuen Eintrag generieren
  *       Sonderzeichen ersetzen
  *       Einträge innerhalb eines Keys sortieren
- *       suche nach fehlenden frei wählbaren Einträgen
  *       Einrückung bündig nach Leerzeichen
  *       Ausgabe in Datei -o
  *
@@ -56,6 +55,9 @@ class Bibliography
     // Prints missing required fields of each entry
     // if 'only_required' == false optional missing fields are shown too
     void show_missing_fields(bool only_required = true) const;
+
+    // Show all entries that do not define the fields in 'fields'
+    void show_missing_fields(std::vector<std::string> fields) const;
 
     // Set intendation used before every bibElement
     void set_intendation(const std::string &str);

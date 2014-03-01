@@ -396,6 +396,19 @@ void Bibliography::show_missing_fields(bool only_required) const
   }
 }
 
+void Bibliography::show_missing_fields(std::vector<string> fields) const
+{
+  for (const bibEntry& bEn : bib) {
+    for (string& current : fields) {
+      std::transform(current.begin(), current.end(), current.begin(),
+          ::tolower);
+      if (get_field_value(bEn, current).empty())
+        std::cout << bEn.key << " misses field \"" << current << "\""
+          << std::endl;
+    }
+  }
+}
+
 void Bibliography::abbreviate_month()
 {
   for (bibEntry& bEn : bib) {
