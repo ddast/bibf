@@ -1,10 +1,3 @@
-/*
- * Wichtig:
- *        Vector durch mit Kommata getrennte Liste angeben
- *       
- *
- *
- */
 #include "Bibliography.hpp"
 #include <boost/program_options.hpp>
 #include <vector>
@@ -180,20 +173,6 @@ int main(int argc, char* argv[])
     cerr << "Unknown exception.\n";
     return 1;
   }
-
-  /*
-  Bibliography bib1;
-  bib1.add_file("../test.bib");
-  std::vector<std::string> sort_by = {"type", "firstauthor"};
-  bib1.sort_bib( sort_by );
-  std::vector<std::string> print_only;
-  print_only.push_back("AuThor");
-  print_only.push_back("yEAr");
-  print_only.push_back("title");
-  bib1.show_missing_fields();
-  bib1.abbreviate_month();
-  bib1.print_bib();
-  */
 
   return EXIT_SUCCESS;
 }
