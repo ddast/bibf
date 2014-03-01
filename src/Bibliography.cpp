@@ -221,6 +221,7 @@ Bibliography::Bibliography() :
 
 void Bibliography::add_file(std::string file)
 {
+  // add the file to the bibliography
   try {
     std::ifstream bibFile(file.c_str());
     for (bibEntry bE; get_bibEntry(bibFile, bE); bE.element.clear())
@@ -239,13 +240,16 @@ void Bibliography::add_file(std::string file)
 
 string Bibliography::get_field_value(const bibEntry &bE, string field) const
 {
+  // transform to lower case
   std::transform(field.begin(), field.end(), field.begin(), ::tolower);
+  // search for entry
   for (const bibElement& bEl : bE.element) {
     std::string current = bEl.field;
     std::transform(current.begin(), current.end(), current.begin(), ::tolower);
     if (current == field)
       return bEl.value;
   }
+  // return empty string if field was not found
   return "";
 }
 
@@ -341,6 +345,7 @@ void Bibliography::sort_bib(std::vector<string> criteria)
 
 void Bibliography::set_intendation(const std::string& str)
 {
+  // check for consitency and set intendation
   intend = str;
   if (intend.length()+1 >= linebreak)
     linebreak = intend.length()+1;
@@ -348,6 +353,7 @@ void Bibliography::set_intendation(const std::string& str)
 
 void Bibliography::set_linebreak(unsigned int i)
 {
+  // check for consistency and set linebreak
   if (i > 0)
     linebreak = i > intend.length() ? i : intend.length()+1;
   else
@@ -356,6 +362,7 @@ void Bibliography::set_linebreak(unsigned int i)
 
 void Bibliography::set_field_delimiter(char beg, char end)
 {
+  // only {} and '' are valid delimiters but always set the delimiters
   field_beg = beg;
   field_end = end;
   if (!( (beg == '{') || (beg == '"') ))
@@ -368,6 +375,7 @@ void Bibliography::set_field_delimiter(char beg, char end)
 
 void Bibliography::show_missing_fields(bool only_required) const
 {
+  // check for missing required fields
   for (const bibEntry& bEn : bib) {
     std::vector<string> required = Constants::get_required_values(bEn.type);
     for (const string& current : required) {
@@ -382,6 +390,7 @@ void Bibliography::show_missing_fields(bool only_required) const
     }
     if (only_required)
       continue;
+    // check for missing optional fields
     std::vector<string> optional = Constants::get_optional_values(bEn.type);
     for (const string& current : optional) {
       bool has_optional_field = false;
@@ -409,6 +418,7 @@ void Bibliography::show_missing_fields(std::vector<string> fields) const
 
 void Bibliography::abbreviate_month()
 {
+  // try to find the correct abbreviation
   for (bibEntry& bEn : bib) {
     for (bibElement& bEl : bEn.element) {
       std::string field = bEl.field;
