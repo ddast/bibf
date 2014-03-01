@@ -237,9 +237,9 @@ void Bibliography::add_file(std::string file)
   }
 }
 
-string Bibliography::get_field_value(const bibEntry &bE, const string& field)
-  const
+string Bibliography::get_field_value(const bibEntry &bE, string field) const
 {
+  std::transform(field.begin(), field.end(), field.begin(), ::tolower);
   for (const bibElement& bEl : bE.element) {
     std::string current = bEl.field;
     std::transform(current.begin(), current.end(), current.begin(), ::tolower);
@@ -400,8 +400,6 @@ void Bibliography::show_missing_fields(std::vector<string> fields) const
 {
   for (const bibEntry& bEn : bib) {
     for (string& current : fields) {
-      std::transform(current.begin(), current.end(), current.begin(),
-          ::tolower);
       if (get_field_value(bEn, current).empty())
         std::cout << bEn.key << " misses field \"" << current << "\""
           << std::endl;

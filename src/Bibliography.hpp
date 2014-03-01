@@ -125,9 +125,8 @@ class Bibliography
     std::string get_lastname(std::string author) const;
 
     // Returns the value of 'field' in the bibEntry 'bE'
-    // 'field' must be in lower case
-    std::string get_field_value(const bibEntry& bE, const std::string &field)
-      const;
+    // 'field' is case insensitive
+    std::string get_field_value(const bibEntry& bE, std::string field) const;
 
     // Replaces characters defined in 'delchar' of 'str' with spaces and
     // deletes all double spaces
