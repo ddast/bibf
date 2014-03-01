@@ -53,8 +53,8 @@ class Bibliography
     // as a field name
     void sort_bib(std::vector<std::string> criteria);
 
-    // Prints the missing fields of each entry
-    // if 'only_required' == false optional missing fields are shown, too
+    // Prints missing required fields of each entry
+    // if 'only_required' == false optional missing fields are shown too
     void show_missing_fields(bool only_required = true) const;
 
     // Set intendation used before every bibElement
