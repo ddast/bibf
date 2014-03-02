@@ -1,0 +1,16 @@
+Wichtig:
+      Parser ist fehleranfällig (Teste mit nichtgültigen Feldern)
+      neuen Eintrag generieren
+      Sonderzeichen ersetzen
+      Einträge innerhalb eines Keys sortieren
+      Einrückung bündig nach Leerzeichen
+      Ausgabe in Datei mit -o
+
+Unwichtig:
+      suchen und ersetzen in bestimmtem Feld
+      'and' muss vielleicht nicht klein geschrieben werden
+      create_keys kann "nur" 26 Veröffentlichungen eines Autors pro Jahr
+
+Cool aber aufwändig:
+      anpassbare Keys generieren
+
