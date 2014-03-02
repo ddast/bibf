@@ -103,8 +103,8 @@ int main(int argc, char* argv[])
       }
     }
     else {
-      cerr << "No input files given\n";
-      return 1;
+      bib.add(std::cin);
+      //return 1;
     }
 
     // change case of field ids
@@ -172,8 +172,10 @@ int main(int argc, char* argv[])
     }
 
     // print only given fields
-    if (vm.count("only"))
+    if (vm.count("only")) {
       bib.print_bib( separate_string(vm["only"].as<std::string>()) );
+      return 0;
+    }
 
     // standard action, print bib
     bib.print_bib();
