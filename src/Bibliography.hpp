@@ -33,8 +33,8 @@ class Bibliography
     // Constructur only defines some standard values
     Bibliography();
 
-    // Add the content of the file to the bibliography
-    void add_file(std::string file);
+    // Add the content of a stream to the bibliography
+    void add(std::istream &is);
 
     // Changes all keys to the scheme:
     // last name of the first author + last two digits of the year + {a,b,c...}

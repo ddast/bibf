@@ -96,8 +96,11 @@ int main(int argc, char* argv[])
     if (vm.count("input-files")) {
       std::vector<std::string> filenames =
         vm["input-files"].as< std::vector<std::string> >();
-      for (std::string &filename : filenames)
-        bib.add_file(filename);
+      for (std::string &filename : filenames) {
+        std::ifstream bibFile(filename.c_str());
+        bib.add(bibFile);
+        bibFile.close();
+      }
     }
     else {
       cerr << "No input files given\n";

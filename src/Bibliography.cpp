@@ -219,23 +219,12 @@ Bibliography::Bibliography() :
   field_end('}')
 { }
 
-void Bibliography::add_file(std::string file)
+void Bibliography::add(istream &is)
 {
-  // add the file to the bibliography
-  try {
-    std::ifstream bibFile(file.c_str());
-    for (bibEntry bE; get_bibEntry(bibFile, bE); bE.element.clear())
-      bib.push_back(bE);
-    bibFile.close();
-  }
-  catch(std::exception& e) {
-    std::cerr << "error: " << e.what() << "\n";
-    exit(1);
-  }
-  catch(...) {
-    std::cerr << "Unknown exception.\n";
-    exit(1);
-  }
+  // add the stream to the bibliography
+  for (bibEntry bE; get_bibEntry(is, bE); bE.element.clear())
+    bib.push_back(bE);
+
   // do a consistency check
   check_consistency();
 }
