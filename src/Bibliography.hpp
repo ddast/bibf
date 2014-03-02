@@ -1,22 +1,3 @@
-/*
- * Wichtig:
- *       Parser ist fehleranfällig (Teste mit nichtgültigen Feldern)
- *       neuen Eintrag generieren
- *       Sonderzeichen ersetzen
- *       Einträge innerhalb eines Keys sortieren
- *       Einrückung bündig nach Leerzeichen
- *       Ausgabe in Datei -o
- *
- * Unwichtig:
- *       suchen und ersetzen in bestimmtem Feld
- *       'and' muss wahrscheinlich nicht klein geschrieben werden
- *       create_keys kann "nur" 26 Veröffentlichungen eines Autors pro Jahr
- *
- * Cool aber aufwändig:
- *       anpassbare Keys generieren
- *       Import von Online Referenzen
- */
-
 #ifndef BIBLIOGRAPHY_H
 #define BIBLIOGRAPHY_H
 
