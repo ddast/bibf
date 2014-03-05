@@ -24,7 +24,7 @@ int main(int argc, char* argv[])
 {
   try {
     // visible command line options
-    po::options_description visible("Usage: reformbib [OPTION]... [FILE]...");
+    po::options_description visible("Usage: bibf [OPTION]... [FILE]...");
     visible.add_options()
       ("create-keys,c", "create keys using last name of first author plus last"
         " two digits of the year plus [a,b,c...]")
@@ -85,7 +85,7 @@ int main(int argc, char* argv[])
 
     // version message
     if (vm.count("version")) {
-      cout << "reformbib 0.1\n";
+      cout << "bibf 0.1\n";
       return 0;
     }
 
