@@ -183,20 +183,18 @@ void Bibliography::print_bib(std::vector<string> print_only) const
       if (!do_print) continue;
       std::cout << ",\n";
       // Use no field delimiters if value is a numeric
-      char _field_beg = field_beg;
-      char _field_end = field_end;
-      if (is_numerical(bEl.value)) {
-        _field_beg = '\0';
-        _field_end = '\0';
-      }
+      bool print_delimiter = true;
+      if (is_numerical(bEl.value))
+        print_delimiter = false;
       // Or if the month field uses three-letter abbreviations
       if ( (field == "month") &&
-          Constants::is_valid_month_abbreviation(bEl.value) ) {
-        _field_beg = '\0';
-        _field_end = '\0';
-      }
-      string line =
-        intend + bEl.field + " = " + _field_beg + bEl.value + _field_end;
+          Constants::is_valid_month_abbreviation(bEl.value) )
+        print_delimiter = false;
+      string line = intend + bEl.field + " = ";
+      if (print_delimiter)
+        line += field_beg + bEl.value +  field_end;
+      else
+        line += bEl.value;
       // break after 'linebreak' characters and use double intend in next line
       if (line.length() >= linebreak)
         for (unsigned int i = line.length()-1; i > intend.length(); --i)
