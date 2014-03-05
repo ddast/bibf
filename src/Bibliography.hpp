@@ -114,6 +114,8 @@ class Bibliography
     std::string clean_string(std::string str,
         const std::string& delchar = "\t\n") const;
 
+    std::string clean_key(std::string key) const;
+
     // Checks if the given string is a numerical value
     bool is_numerical(const std::string &s) const;
 

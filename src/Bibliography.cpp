@@ -62,6 +62,23 @@ string Bibliography::clean_string(string str, const string& delchar) const
   return str;
 }
 
+string Bibliography::clean_key(string key) const
+{
+  // allowed characters in key
+  string allowed = "abcdefghijklmnopqrstuvwxyz"
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    "1234567890:.-";
+
+  // delete all not allowed keys
+  while (true) {
+    size_t pos = key.find_first_not_of(allowed);
+    if (pos == std::string::npos)
+      break;
+    key.erase(pos, 1);
+  }
+
+  return key;
+}
 
 istream& Bibliography::get_bibEntry(istream& is, bibEntry& bEn) const
 {
@@ -280,6 +297,7 @@ void Bibliography::create_keys()
       break;
     }
     it->key += id;
+    it->key = clean_key(it->key);
   }
 }
 
