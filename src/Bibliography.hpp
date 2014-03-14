@@ -95,10 +95,6 @@ class Bibliography
     // unnested ',' is found, i.e. one that is not inside parenthesis.
     std::istream& get_unnested(std::istream& is, std::string& str) const;
     
-    // Deletes leading and ending characters defined in 'trimchar' from 'str'
-    std::string trim(const std::string& str,
-        const std::string& trimchar = " \t\n") const;
-    
     // Reads one bibtex entry from 'is' and stores it into 'bEn'
     std::istream& get_bibEntry(std::istream& is, bibEntry& bEn) const;
 
@@ -109,10 +105,9 @@ class Bibliography
     // 'field' is case insensitive
     std::string get_field_value(const bibEntry& bE, std::string field) const;
 
-    // Replaces characters defined in 'delchar' of 'str' with spaces and
-    // deletes all double spaces
-    std::string clean_string(std::string str,
-        const std::string& delchar = "\t\n") const;
+    // Deletes all double spaces, leading/ending spaces and nonprintable
+    // characters in 'str'
+    std::string clean_string(std::string str) const;
 
     std::string clean_key(std::string key) const;
 

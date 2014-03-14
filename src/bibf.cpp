@@ -113,7 +113,7 @@ int main(int argc, char* argv[])
 
     // linebreak
     if (vm.count("linebreak"))
-      bib.set_linebreak(vm["linebreak"].as<int>());
+      bib.set_linebreak(vm["linebreak"].as<unsigned int>());
 
     // intendation
     if (vm.count("intendation"))

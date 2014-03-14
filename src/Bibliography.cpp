@@ -37,27 +37,24 @@ istream& Bibliography::get_unnested(istream& is, string& str) const
   return is;
 }
 
-string Bibliography::trim(const string& str, const string& trimchar) const
+string Bibliography::clean_string(string str) const
 {
-  size_t first = str.find_first_not_of(trimchar);
-  if (first == string::npos)
-    return "";
-  size_t last = str.find_last_not_of(trimchar);
-  return str.substr(first, last-first+1);
-}
-
-string Bibliography::clean_string(string str, const string& delchar) const
-{
-  // Replace characters in 'delchar' with spaces
-  for (char& c1 : str)
-    for (char c2 : delchar)
-      if (c1 == c2)
-        c1 = ' ';
+  // Replace all nonprintable characters with spaces
+  auto del_from = std::remove_if(str.begin(), str.end(),
+      [] (char c) -> bool { return !isprint(c); });
+  str.erase(del_from, str.end());
 
   // Remove double spaces
-  auto del_from = std::unique(str.begin(), str.end(),
+  del_from = std::unique(str.begin(), str.end(),
       [] (char c1, char c2) { return (c1 == c2 && c1 == ' '); } );
   str.erase(del_from, str.end());
+
+  // Delete leading and ending spaces
+  size_t first = str.find_first_not_of(" ");
+  if (first == string::npos)
+    return "";
+  size_t last = str.find_last_not_of(" ");
+  str = str.substr(first, last-first+1);
 
   return str;
 }
@@ -101,7 +98,7 @@ istream& Bibliography::get_bibEntry(istream& is, bibEntry& bEn) const
     bool last(false);
     // get one line ending with ',' however last line may not end with ','
     if (!get_unnested(bEn_ss, bEl_s)) {
-      if (trim(bEl_s).empty()) break;
+      if (clean_string(bEl_s).empty()) break;
       else last = true;
     }
     // extract element
@@ -109,10 +106,17 @@ istream& Bibliography::get_bibEntry(istream& is, bibEntry& bEn) const
     bibElement bEl;
     // field is the part before '='
     std::getline(bEl_ss, bEl.field, '=');
-    bEl.field = trim(bEl.field);
+    bEl.field = clean_string(bEl.field);
+    // 'delim' is the first printable character that is not a space
+    string bEl_str = bEl_ss.str().substr(bEl_ss.tellg());
+    char delim = ' ';
+    for (char& c : bEl_str) {
+      if ((!isspace(c)) && (isprint(c))) {
+        delim = c;
+        break;
+      }
+    }
     // value may be in {} or "" or without delimiter
-    char delim = 
-      bEl_ss.str()[bEl_ss.str().find_first_not_of(" \t\n", bEl_ss.tellg())];
     std::getline(bEl_ss, tmp, delim);
     if (delim == '{')
       get_block(bEl_ss, bEl.value);
@@ -122,7 +126,7 @@ istream& Bibliography::get_bibEntry(istream& is, bibEntry& bEn) const
       bEl_ss.unget();
       std::getline(bEl_ss, bEl.value);
     }
-    bEl.value = clean_string(trim(bEl.value));
+    bEl.value = clean_string(bEl.value);
     bEn.element.push_back(bEl);
     if (last) break;
   }
@@ -136,7 +140,7 @@ string Bibliography::get_lastname(string author) const
   size_t found = author.find("and");
   if (found != string::npos)
     author = author.substr(0, found);
-  author = trim(author);
+  author = clean_string(author);
 
   // get last name
   found = author.find(",");
