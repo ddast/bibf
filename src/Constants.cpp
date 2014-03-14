@@ -5,7 +5,7 @@ using std::string;
 typedef std::vector<int> veci;
 typedef std::pair<veci, veci> pveci;
 
-const std::array<std::string, 27> Constants::standard_entry_fields {
+const std::array<std::string, 27> Constants::standard_entry_fields {{
   /*00*/ "address",
   /*01*/ "annote",
   /*02*/ "author",
@@ -33,7 +33,7 @@ const std::array<std::string, 27> Constants::standard_entry_fields {
   /*24*/ "author editor",
   /*25*/ "volume number",
   /*26*/ "chapter pages"
-};
+}};
 
 const std::map<string, pveci> Constants::standard_types {
   {"article", pveci(veci{2, 20, 10, 23}, veci{22, 14, 16, 12, 13})},
@@ -53,10 +53,10 @@ const std::map<string, pveci> Constants::standard_types {
   {"unpublished", pveci(veci{2, 20, 13}, veci{12, 23})}
 };
 
-const std::array<std::string, 12> Constants::month_abbreviations {
+const std::array<std::string, 12> Constants::month_abbreviations {{
   "jan", "feb", "mar", "apr", "may", "jun",
   "jul", "aug", "sep", "oct", "nov", "dec"
-};
+}};
 
 
 std::vector<string> Constants::get_required_values(std::string type)

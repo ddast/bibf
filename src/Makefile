@@ -1,5 +1,5 @@
 CXX=g++
-CXXFLAGS=-O2 -Wall -Wextra -pedantic-errors -std=c++11
+CXXFLAGS=-O2 -Wall -Wextra -pedantic-errors -std=c++0x
 LDFLAGS=
 LDLIBS=-lboost_program_options
 

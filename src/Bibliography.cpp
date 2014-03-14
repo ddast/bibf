@@ -322,7 +322,7 @@ void Bibliography::change_field_case(const char uplo)
 void Bibliography::erase_field(string field)
 {
   std::transform(field.begin(), field.end(), field.begin(), ::tolower);
-  auto compare = [&] (bibElement& el) {
+  auto compare = [&] (bibElement& el) -> bool {
     string cur = el.field;
     std::transform(cur.begin(), cur.end(), cur.begin(), ::tolower);
     if (cur == field) return true;
@@ -337,7 +337,7 @@ void Bibliography::sort_bib(std::vector<string> criteria)
 {
   // check if 'bE1' is smaller than 'bE2' using the given criteria
   auto cmp_after_criteria =
-    [&] (const bibEntry& bE1, const bibEntry& bE2) {
+    [&] (const bibEntry& bE1, const bibEntry& bE2) -> bool {
       for (string& cur_crit : criteria) {
         std::transform(cur_crit.begin(), cur_crit.end(), cur_crit.begin(),
             ::tolower);
