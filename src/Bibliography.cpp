@@ -219,7 +219,7 @@ void Bibliography::print_bib(std::vector<string> print_only) const
       // break after 'linebreak' characters and use double intend in next line
       if (line.length() >= linebreak)
         for (unsigned int i = line.length()-1; i > intend.length(); --i)
-          if ((line[i] == ' ') && (i <= linebreak+1)) {
+          if ((line[i] == ' ') && (i <= linebreak)) {
             line[i] = '\n';
             line.insert(i+1, intend+intend);
             break;
