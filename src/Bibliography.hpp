@@ -21,9 +21,12 @@ class Bibliography
     // last name of the first author + last two digits of the year + {a,b,c...}
     void create_keys();
 
-    // Changes every bibElement.field in 'bib' to lower (uplo=='L')
-    // or upper case (uplo=='U')
-    void change_field_case(const char uplo);
+    // Changes every bibEntry.type in 'bib' to lower (case_t=='L'),
+    // upper case (case_t=='U') or start case (case_t='S')
+    // Change the case of every bibEntry.type to 'case_t'
+    // and the case of every bibElement.field to 'case_f'
+    // Valid values for 'case_{t,f}': U (upper), L (lower), S (start)
+    void change_case(const char case_t, const char case_f);
 
     // Delete the field 'field' in every bibEntry (case insensitive)
     void erase_field(std::string field);

@@ -44,8 +44,10 @@ int main(int argc, char* argv[])
       ("missing-fields,M", po::value<std::string>(),
         "show all entries that do not contain a specific field;"
         " use commas to search for more than one field")
-      ("change-case", po::value<char>(), "change the case of all field"
-        " identifiers to lower (L) or upper (U) case")
+      ("change-case", po::value<std::string>()->implicit_value("L"),
+        "change the case of all types and keys to lower (L), upper (U) or"
+        " start (S) case (default L); for different cases of types and cases"
+        " use two characters (LU, UL, ...)")
       ("linebreak", po::value<unsigned int>(), "break lines after given"
         " amount of characters (default 79)")
       ("intendation", po::value<std::string>(),
@@ -108,8 +110,18 @@ int main(int argc, char* argv[])
     }
 
     // change case of field ids
-    if (vm.count("change-case"))
-      bib.change_field_case(vm["change-case"].as<char>());
+    if (vm.count("change-case")) {
+      std::string cases = vm["change-case"].as<std::string>();
+      if (cases.length() == 1)
+        bib.change_case(cases[0], cases[0]);
+      else if (cases.length() == 2)
+        bib.change_case(cases[0], cases[1]);
+      else {
+        std::cerr << "Malformatted option '--change-case', valid options"
+          << " are one or two characters.\n";
+        return 1;
+      }
+    }
 
     // linebreak
     if (vm.count("linebreak"))

@@ -305,23 +305,50 @@ void Bibliography::create_keys()
   }
 }
 
-void Bibliography::change_field_case(const char uplo)
+void Bibliography::change_case(const char case_t, const char case_f)
 {
-  int (*touplo)(int);
-  if (uplo == 'U')
-    touplo = &std::toupper;
-  else if (uplo == 'L')
-    touplo = &std::tolower;
+  // operation for the types
+  int (*touplo_t)(int);
+  if (case_t == 'U')
+    touplo_t= &std::toupper;
+  else if (case_t == 'L')
+    touplo_t= &std::tolower;
+  else if (case_t == 'S')
+    touplo_t= &std::tolower;
   else {
-    std::cerr << "Bibliography::change_field_case : uplo must be 'U' or 'L' "
-      << "but is " << uplo << std::endl;
+    std::cerr << "Bibliography::change_case : case_t must be 'U', 'L' "
+      << " or 'S' but is " << case_t << std::endl;
     return;
   }
-  for (bibEntry& bEn : bib)
-    for (bibElement& bEl : bEn.element)
+
+  // operation for the fields
+  int (*touplo_f)(int);
+  if (case_f == 'U')
+    touplo_f= &std::toupper;
+  else if (case_f == 'L')
+    touplo_f= &std::tolower;
+  else if (case_f == 'S')
+    touplo_f= &std::tolower;
+  else {
+    std::cerr << "Bibliography::change_case : case_f must be 'U', 'L' "
+      << " or 'S' but is " << case_f << std::endl;
+    return;
+  }
+
+  for (bibEntry& bEn : bib) {
+    std::transform(bEn.type.begin(), bEn.type.end(), bEn.type.begin(),
+        touplo_t);
+    if (case_f == 'S')
+      bEn.type[0] = toupper(bEn.type[0]);
+    for (bibElement& bEl : bEn.element) {
       std::transform(bEl.field.begin(), bEl.field.end(), bEl.field.begin(),
-          touplo);
+          touplo_f);
+      if (case_f == 'S')
+        bEl.field[0] = toupper(bEl.field[0]);
+    }
+  }
 }
+
 
 void Bibliography::erase_field(string field)
 {
