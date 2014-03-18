@@ -1,5 +1,7 @@
 #include "Bibliography.hpp"
 #include <boost/program_options.hpp>
+#include <iostream>
+#include <fstream>
 #include <vector>
 #include <string>
 #include <sstream>
@@ -26,6 +28,7 @@ int main(int argc, char* argv[])
     // visible command line options
     po::options_description visible("Usage: bibf [OPTION]... [FILE]...");
     visible.add_options()
+      ("output,o", po::value<std::string>(), "print to file instead of cout")
       ("create-keys,c", "create keys using last name of first author plus last"
         " two digits of the year plus [a,b,c...]")
       ("only,O", po::value<std::string>(),
@@ -106,7 +109,12 @@ int main(int argc, char* argv[])
     }
     else {
       bib.add(std::cin);
-      //return 1;
+    }
+
+    // set output file
+    std::ofstream out;
+    if (vm.count("output")) {
+      out.open(vm["output"].as<std::string>());
     }
 
     // change case of field ids
@@ -185,12 +193,25 @@ int main(int argc, char* argv[])
 
     // print only given fields
     if (vm.count("only")) {
-      bib.print_bib( separate_string(vm["only"].as<std::string>()) );
+      std::vector<std::string> only =
+        separate_string(vm["only"].as<std::string>());
+      if (out.is_open())
+        bib.print_bib( only, out);
+      else
+        bib.print_bib(only, std::cout);
+
       return 0;
     }
 
     // standard action, print bib
-    bib.print_bib();
+    if (out.is_open())
+      bib.print_bib(out);
+    else
+      bib.print_bib(std::cout);
+
+    // close output stream
+    if (out.is_open())
+      out.close();
 
   }
   catch(std::exception& e) {

@@ -53,10 +53,10 @@ class Bibliography
     void set_field_delimiter(char beg, char end);
 
     // Print the bibliography to std::cout
-    void print_bib() const;
+    void print_bib(std::ostream &os) const;
 
     // Print only the field defined in 'print_only' (case insensitive)
-    void print_bib(std::vector<std::string> print_only) const;
+    void print_bib(std::vector<std::string> only, std::ostream &os) const;
 
     // Try to find the correct abbreviations for the month field
     void abbreviate_month();

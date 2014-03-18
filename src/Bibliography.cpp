@@ -165,12 +165,6 @@ string Bibliography::get_lastname(string author) const
   return author;
 }
 
-void Bibliography::print_bib() const
-{
-  std::vector<string> empty;
-  print_bib(empty);
-}
-
 bool Bibliography::is_numerical(const string& s) const
 {
   size_t found = s.find_first_not_of("1234567890");
@@ -178,31 +172,37 @@ bool Bibliography::is_numerical(const string& s) const
 }
 
 
-void Bibliography::print_bib(std::vector<string> print_only) const
+void Bibliography::print_bib(std::ostream &os) const
 {
-  bool print_all = print_only.empty();
+  std::vector<string> empty;
+  print_bib(empty, os);
+}
+
+void Bibliography::print_bib(std::vector<string> only, std::ostream &os) const
+{
+  bool print_all = only.empty();
   // convert list to lowercase
   if (!print_all)
-    for (string& s : print_only)
+    for (string& s : only)
       std::transform(s.begin(), s.end(), s.begin(), ::tolower);
   // key
   for (const bibEntry& bEn : bib) {
-    std::cout << '@' << bEn.type << '{' << bEn.key;
+    os << '@' << bEn.type << '{' << bEn.key;
     // elements
     for (const bibElement& bEl : bEn.element) {
-      // print only if field is in 'print_only' or if 'print_all' is set
+      // print only if field is in 'only' or if 'print_all' is set
       bool do_print = print_all;
       string field = bEl.field;
       std::transform(field.begin(), field.end(), field.begin(), ::tolower);
       if (!print_all) {
-        for (const string& po : print_only)
+        for (const string& po : only)
           if (po == field) {
             do_print = true;
             break;
           }
       }
       if (!do_print) continue;
-      std::cout << ",\n";
+      os << ",\n";
       // Use no field delimiters if value is a numeric
       bool print_delimiter = true;
       if (is_numerical(bEl.value))
@@ -224,10 +224,10 @@ void Bibliography::print_bib(std::vector<string> print_only) const
             line.insert(i+1, intend+intend);
             break;
           }
-      std::cout << line;
+      os << line;
     }
     // finish entry
-    std::cout << "\n}\n" << std::endl;
+    os << "\n}\n" << std::endl;
   }
 }
 
