@@ -213,7 +213,7 @@ void Bibliography::print_bib(std::vector<string> only, std::ostream &os) const
         print_delimiter = false;
       string line = intend + bEl.field + " = ";
       if (print_delimiter)
-        line += field_beg + bEl.value +  field_end;
+        line += field_beg + bEl.value + field_end;
       else
         line += bEl.value;
       // break after 'linebreak' characters and use double intend in next line
@@ -368,7 +368,8 @@ void Bibliography::sort_bib(std::vector<string> criteria)
 {
   // check if 'bE1' is smaller than 'bE2' using the given criteria
   auto cmp_after_criteria =
-    [&] (const bibEntry& bE1, const bibEntry& bE2) -> bool {
+    [&] (const bibEntry& bE1, const bibEntry& bE2) -> bool
+    {
       for (string& cur_crit : criteria) {
         std::transform(cur_crit.begin(), cur_crit.end(), cur_crit.begin(),
             ::tolower);
@@ -398,6 +399,23 @@ void Bibliography::sort_bib(std::vector<string> criteria)
   // sort bibliography
   std::sort(bib.begin(), bib.end(), cmp_after_criteria);
   //bib.sort(cmp_after_criteria);
+}
+
+void Bibliography::sort_elements()
+{
+  // define compare function
+  auto compare_field =
+    [] (const bibElement& bEl1, const bibElement& bEl2) -> bool 
+    {
+      if (bEl1.field < bEl2.field)
+        return true;
+      return false;
+    };
+
+  // sort elements in each entry
+  for (bibEntry& bEn : bib) {
+    std::sort(bEn.element.begin(), bEn.element.end(), compare_field);
+  }
 }
 
 void Bibliography::set_intendation(const std::string& str)

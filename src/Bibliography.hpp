@@ -36,6 +36,9 @@ class Bibliography
     // as a field name
     void sort_bib(std::vector<std::string> criteria);
 
+    // Sort the elements of every entry in alphabetical order
+    void sort_elements();
+
     // Prints missing required fields of each entry
     // if 'only_required' == false optional missing fields are shown too
     void show_missing_fields(bool only_required = true) const;

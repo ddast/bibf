@@ -35,9 +35,10 @@ int main(int argc, char* argv[])
         "print only the given fields;"
         " different fields must be separated by commas")
       ("sort-bib,s", po::value<std::string>(), 
-        "sorts the bibliography by the given citeria; valid values are 'type',"
+        "sort the bibliography by the given citeria; valid values are 'type',"
         " 'key', 'firstauthor' and every string used as field identifier;"
         " different values must be separated by commas")
+      ("sort-elements,S", "sort the elements of each entry alphabetically")
       ("erase-field,e", po::value<std::string>(),
         "erase the field in every entry;"
         " use comma to apply more than one value")
@@ -171,6 +172,11 @@ int main(int argc, char* argv[])
       std::vector<std::string> sort =
         separate_string( vm["sort-bib"].as<std::string>() );
       bib.sort_bib(vm["sort-bib"].as< std::vector<std::string> >());
+    }
+
+    // sort elements
+    if (vm.count("sort-elements")) {
+      bib.sort_elements();
     }
 
     // show missing fields
