@@ -1,3 +1,23 @@
+/*  bibf - a simple bibtex pretty printer
+ *
+ *  Copyright (C) 2014 Dennis Dast <mail@ddast.de>
+ *
+ *  This file is part of bibf.
+ *
+ *  bibf is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  bibf is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with bibf.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "Bibliography.hpp"
 #include <boost/program_options.hpp>
 #include <iostream>
@@ -91,7 +111,10 @@ int main(int argc, char* argv[])
 
     // version message
     if (vm.count("version")) {
-      cout << "bibf 0.1\n";
+      cout << "bibf 0.1 Copyright (C) 2014 Dennis Dast\n\n"
+        << "This program comes with ABSOLUTELY NO WARRANTY.\n"
+        << "This is free software, and you are welcome to redistribute it"
+        << " under certain conditions.\n";
       return 0;
     }
 

@@ -2,4 +2,4 @@ src/*.o
 *.swp
 src/bibf
 test.bib
-todo.txt
+TODO
