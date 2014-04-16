@@ -111,6 +111,9 @@ class Bibliography
     // standard values '{' and '}'
     char field_beg;
     char field_end;
+
+    // Use left or right alignment for the field names
+    bool right_aligned;
     
     // Extracts characters from 'is' and stores them into 'str' until the block
     // ends. A block is denoted by '}' and the block may contain pairs of

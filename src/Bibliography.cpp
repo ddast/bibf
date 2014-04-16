@@ -205,45 +205,72 @@ void Bibliography::print_bib(std::vector<string> only, std::ostream &os) const
   if (!print_all)
     for (string& s : only)
       std::transform(s.begin(), s.end(), s.begin(), ::tolower);
-  // key
-  for (const bibEntry& bEn : bib) {
+  // iterate over all entries (use copies)
+  for (bibEntry bEn : bib) {
+    // delete all entries which are not printed
+    if (!print_all) {
+      bEn.element.erase(
+          std::remove_if(bEn.element.begin(), bEn.element.end(),
+            [&] (bibElement bEl) -> bool {
+              std::transform(bEl.field.begin(), bEl.field.end(),
+                bEl.field.begin(), ::tolower);
+              for (const string &po : only) {
+                if (po == bEl.field) 
+                  return false;
+              }
+              return true;
+            }),
+          bEn.element.end());
+    }
+
+    // search for longest field name
+    unsigned int longest_field = 0;
+    if (right_aligned) {
+      for (const bibElement &bEl : bEn.element)
+        if (bEl.field.length() > longest_field)
+          longest_field = bEl.field.length();
+    }
+
+    // print key
     os << '@' << bEn.type << '{' << bEn.key;
-    // elements
+    // print elements
     for (const bibElement& bEl : bEn.element) {
-      // print only if field is in 'only' or if 'print_all' is set
-      bool do_print = print_all;
-      string field = bEl.field;
-      std::transform(field.begin(), field.end(), field.begin(), ::tolower);
-      if (!print_all) {
-        for (const string& po : only)
-          if (po == field) {
-            do_print = true;
-            break;
-          }
-      }
-      if (!do_print) continue;
       os << ",\n";
       // Use no field delimiters if value is a numeric
       bool print_delimiter = true;
       if (is_numerical(bEl.value))
         print_delimiter = false;
       // Or if the month field uses three-letter abbreviations
+      std::string field = bEl.field;
+      std::transform(field.begin(), field.end(), field.begin(), ::tolower);
       if ( (field == "month") &&
           Constants::is_valid_month_abbreviation(bEl.value) )
         print_delimiter = false;
-      string line = intend + bEl.field + " = ";
+      // construct line
+      string line;
+      if (right_aligned) {
+        for (unsigned int i = 0, end = longest_field-field.length();
+            i < end; ++i)
+          line.push_back(' ');
+      }
+      line += intend + bEl.field + " = ";
+      std::string intend_after_break;
+      for (unsigned int i = 0, length = line.length(); i < length; ++i)
+        intend_after_break.push_back(' ');
       if (print_delimiter)
         line += field_beg + bEl.value + field_end;
       else
         line += bEl.value;
       // break after 'linebreak' characters and use double intend in next line
-      if (line.length() >= linebreak)
-        for (unsigned int i = line.length()-1; i > intend.length(); --i)
+      if (line.length() >= linebreak) {
+        for (unsigned int i = line.length()-1; i > intend.length(); --i) {
           if ((line[i] == ' ') && (i <= linebreak)) {
             line[i] = '\n';
-            line.insert(i+1, intend+intend);
+            line.insert(i+1, intend_after_break);
             break;
           }
+        }
+      }
       os << line;
     }
     // finish entry
@@ -255,7 +282,8 @@ Bibliography::Bibliography() :
   intend("  "),
   linebreak(79),
   field_beg('{'),
-  field_end('}')
+  field_end('}'),
+  right_aligned(true)
 { }
 
 void Bibliography::add(istream &is)
