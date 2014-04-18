@@ -3,7 +3,7 @@ CXXFLAGS=-O2 -Wall -Wextra -pedantic-errors -std=c++0x
 LDFLAGS=
 LDLIBS=-lboost_program_options
 
-SRCS=bibf.cpp Bibliography.cpp Constants.cpp
+SRCS=bibf.cpp Bibliography.cpp Constants.cpp Strings.cpp
 OBJS=$(subst .cpp,.o,$(SRCS))
 
 all: bibf
@@ -12,6 +12,7 @@ bibf: $(OBJS)
 	$(CXX) $(LDFLAGS) -o bibf $(OBJS) $(LDLIBS)
 
 %.o: %.cpp %.hpp
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 clean:
 	rm -f $(OBJS)
