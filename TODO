@@ -1,0 +1,18 @@
+Wichtig:
+      Automatische Umbrüche mehrzeilig
+      Option um alignment zu ändern
+      neuen Eintrag generieren
+      Sonderzeichen ersetzen
+      Fehlerbehandlung überarbeiten
+      Parser auslagern
+      Übersetzung (Wie greift Bibliography auf Lokalisierung zu?)
+      Deutsche Übersetzung
+
+Unwichtig:
+      suchen und ersetzen in bestimmtem Feld
+      'and' muss vielleicht nicht klein geschrieben werden
+      create_keys kann "nur" 26 Veröffentlichungen eines Autors pro Jahr
+
+Cool aber aufwändig:
+      anpassbare Keys generieren
+
