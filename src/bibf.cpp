@@ -19,12 +19,14 @@
  */
 
 #include "Bibliography.hpp"
+#include "Strings.hpp"
 #include <boost/program_options.hpp>
 #include <iostream>
 #include <fstream>
 #include <vector>
 #include <string>
 #include <sstream>
+#include <map>
 
 namespace po = boost::program_options;
 
@@ -42,52 +44,67 @@ std::vector<std::string> separate_string(std::string s)
   return result;
 }
 
+Strings localize_strings()
+{
+  // read environment variable LANG
+  std::string lang = std::getenv("LANG");
+  // create Strings object
+  Strings strs;
+  // if LANG is not set use default language (english)
+  if (lang.empty())
+    return strs;
+  // extract the part before _
+  auto i = lang.find("_");
+  // use default language if LANG has unknown format
+  if (i == std::string::npos)
+    return strs;
+  lang = lang.substr(0, i);
+  // set language
+  strs.set_locale(lang);
+
+  return strs;
+}
+
+
 int main(int argc, char* argv[])
 {
   try {
+    // set language
+    Strings str = localize_strings();
+
     // visible command line options
-    po::options_description visible("Usage: bibf [OPTION]... [FILE]...");
+    po::options_description visible(str.tr(Strings::OPT_USAGE));
     visible.add_options()
-      ("output,o", po::value<std::string>(), "print to file instead of cout")
-      ("create-keys,c", "create keys using last name of first author plus last"
-        " two digits of the year plus [a,b,c...]")
-      ("only,O", po::value<std::string>(),
-        "print only the given fields;"
-        " different fields must be separated by commas")
-      ("sort-bib,s", po::value<std::string>(), 
-        "sort the bibliography by the given citeria; valid values are 'type',"
-        " 'key', 'firstauthor' and every string used as field identifier;"
-        " different values must be separated by commas")
-      ("sort-elements,S", "sort the elements of each entry alphabetically")
+      ("output,o", po::value<std::string>(),
+        str.tr(Strings::OPT_OUTPUT).c_str())
+      ("create-keys,c", str.tr(Strings::OPT_CREATE).c_str())
+      ("only,O", po::value<std::string>(), str.tr(Strings::OPT_ONLY).c_str())
+      ("sort-bib,s", po::value<std::string>(),
+        str.tr(Strings::OPT_SORT_BIB).c_str())
+      ("sort-elements,S", str.tr(Strings::OPT_SORT_ELEMENTS).c_str())
       ("erase-field,e", po::value<std::string>(),
-        "erase the field in every entry;"
-        " use comma to apply more than one value")
+        str.tr(Strings::OPT_ERASE_FIELD).c_str())
       ("show-missing,m", po::value<char>()->implicit_value('R'),
-        "show missing required fields and also missing optional fields with"
-        " option O")
+        str.tr(Strings::OPT_SHOW_MISSING).c_str())
       ("missing-fields,M", po::value<std::string>(),
-        "show all entries that do not contain a specific field;"
-        " use commas to search for more than one field")
+        str.tr(Strings::OPT_MISSING_FIELDS).c_str())
       ("change-case", po::value<std::string>()->implicit_value("L"),
-        "change the case of all types and keys to lower (L), upper (U) or"
-        " start (S) case (default L); for different cases of types and cases"
-        " use two characters (LU, UL, ...)")
-      ("linebreak", po::value<unsigned int>(), "break lines after given"
-        " amount of characters (default 79)")
+        str.tr(Strings::OPT_CHANGE_CASE).c_str())
+      ("linebreak", po::value<unsigned int>(),
+        str.tr(Strings::OPT_LINEBREAK).c_str())
       ("intendation", po::value<std::string>(),
-        "change intendation for pretty printing (default two spaces)")
-      ("delimiter", po::value<char>(), "set field delimiter, valid values"
-        " are { or \"")
-      ("abbrev-month", "try to find the correct abbreviation of the month")
-      ("help", "display this help and exit")
-      ("version", "output version information and exit")
+        str.tr(Strings::OPT_INTENDATION).c_str())
+      ("delimiter", po::value<char>(), str.tr(Strings::OPT_DELIMITER).c_str())
+      ("abbrev-month", str.tr(Strings::OPT_ABBREV_MONTH).c_str())
+      ("help", str.tr(Strings::OPT_HELP).c_str())
+      ("version", str.tr(Strings::OPT_VERSION).c_str())
     ;
 
     // hidden command line options
     po::options_description hidden;
     hidden.add_options()
       ("input-files", po::value< std::vector<std::string> >(),
-       "bibtex files for input")
+        str.tr(Strings::OPT_INPUT).c_str())
     ;
     // positional options are interpreted as input-file
     po::positional_options_description pod;
@@ -111,10 +128,7 @@ int main(int argc, char* argv[])
 
     // version message
     if (vm.count("version")) {
-      cout << "bibf 0.1 Copyright (C) 2014 Dennis Dast\n\n"
-        << "This program comes with ABSOLUTELY NO WARRANTY.\n"
-        << "This is free software, and you are welcome to redistribute it"
-        << " under certain conditions.\n";
+      cout << str.tr(Strings::OUT_VERSION);
       return 0;
     }
 
@@ -149,8 +163,7 @@ int main(int argc, char* argv[])
       else if (cases.length() == 2)
         bib.change_case(cases[0], cases[1]);
       else {
-        std::cerr << "Malformatted option '--change-case', valid options"
-          << " are one or two characters.\n";
+        std::cerr << str.tr(Strings::ERR_CHANGE_CASE);
         return 1;
       }
     }
@@ -171,7 +184,7 @@ int main(int argc, char* argv[])
       else if (delim == '"')
         bib.set_field_delimiter('"', '"');
       else
-        std::cerr << "Illegal field delimiter: " << delim << "\n";
+        std::cerr << str.tr(Strings::ERR_DELIMITER) << delim << "\n";
     }
 
     // abbreviate months
