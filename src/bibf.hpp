@@ -18,8 +18,8 @@
  *  along with bibf.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef REFORMBIB_H
-#define REFORMBIB_H
+#ifndef BIBF_H
+#define BIBF_H
 
 // Converts a string with comma separated parts into a vector
 std::vector<std::string> separate_string(std::string s);
