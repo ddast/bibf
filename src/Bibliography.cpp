@@ -20,6 +20,7 @@
 
 #include "Bibliography.hpp"
 #include "Constants.hpp"
+#include "Strings.hpp"
 
 using std::istream;
 using std::string;
@@ -173,7 +174,7 @@ string Bibliography::get_lastname(string author) const
 
 
   if (author.empty()) {
-    std::cerr << "Author field is empty" << std::endl;
+    std::cerr << Strings::tr(Strings::ERR_EMPTY_AUTHOR) << std::endl;
     return "";
   }
 
@@ -305,8 +306,8 @@ bool Bibliography::check_consistency() const
   for (auto it1 = bib.begin(), end = bib.end(); it1 != end-1; ++it1) {
     for (auto it2 = it1+1; it2 != end; ++it2) {
       if (it1->key == it2->key) {
-        std::cerr << "Warning: Key \"" << it1->key
-          << "\" defined more than once\n";
+        std::cerr << Strings::tr(Strings::ERR_DOUBLE_KEY_1) << it1->key
+          << Strings::tr(Strings::ERR_DOUBLE_KEY_2) ;
         is_consistent = false;
       }
     }
@@ -343,9 +344,9 @@ void Bibliography::create_keys()
       if (it->key == it2->key.substr(0,it2->key.length()-1))
         ++id;
     if (id > 'z') {
-      std::cerr << "Bibliography::create_keys(): Author " << author
-        << " has more than 26 entries in the year " << year
-        << ". Ran out of identifiers for creating the keys." << std::endl;
+      std::cerr << Strings::tr(Strings::ERR_RAN_OUT_OF_IDS_1) << author
+        << Strings::tr(Strings::ERR_RAN_OUT_OF_IDS_2) << year
+        << Strings::tr(Strings::ERR_RAN_OUT_OF_IDS_3) << std::endl;
       break;
     }
     it->key += id;
@@ -364,8 +365,8 @@ void Bibliography::change_case(const char case_t, const char case_f)
   else if (case_t == 'S')
     touplo_t= &std::tolower;
   else {
-    std::cerr << "Bibliography::change_case : case_t must be 'U', 'L' "
-      << " or 'S' but is " << case_t << std::endl;
+    std::cerr << Strings::tr(Strings::ERR_UNKNOWN_CHANGE_CASE_T)
+      << case_t << std::endl;
     return;
   }
 
@@ -378,8 +379,8 @@ void Bibliography::change_case(const char case_t, const char case_f)
   else if (case_f == 'S')
     touplo_f= &std::tolower;
   else {
-    std::cerr << "Bibliography::change_case : case_f must be 'U', 'L' "
-      << " or 'S' but is " << case_f << std::endl;
+    std::cerr << Strings::tr(Strings::ERR_UNKNOWN_CHANGE_CASE_F)
+      << case_f << std::endl;
     return;
   }
 
@@ -489,11 +490,11 @@ void Bibliography::set_field_delimiter(char beg, char end)
   field_beg = beg;
   field_end = end;
   if (!( (beg == '{') || (beg == '"') ))
-    std::cerr << "Warning: set_field_delimiter called with illegal "
-      << "character as begin field delimiter: " << beg << std::endl;
+    std::cerr << Strings::tr(Strings::ERR_ILLEGAL_FIELD_DELIMITER_BEG)
+      << beg << std::endl;
   if (!( (end == '}') || (end == '"') ))
-    std::cerr << "Warning: set_field_delimiter called with illegal "
-      << "character as end field delimiter: " << beg << std::endl;
+    std::cerr << Strings::tr(Strings::ERR_ILLEGAL_FIELD_DELIMITER_END)
+      << beg << std::endl;
 }
 
 void Bibliography::show_missing_fields(bool only_required) const
@@ -508,8 +509,8 @@ void Bibliography::show_missing_fields(bool only_required) const
         if (!(get_field_value(bEn, _current).empty()))
           has_required_field = true;
       if (!has_required_field)
-        std::cout << bEn.key << " misses required field \"" << current << "\""
-          << std::endl;
+        std::cout << bEn.key << Strings::tr(Strings::OUT_MISSES_REQUIRED)
+          << current << "\"" << std::endl;
     }
     if (only_required)
       continue;
@@ -522,8 +523,8 @@ void Bibliography::show_missing_fields(bool only_required) const
         if (!(get_field_value(bEn, _current).empty()))
           has_optional_field = true;
       if (!has_optional_field)
-        std::cout << bEn.key << " misses optional field \"" << current << "\""
-          << std::endl;
+        std::cout << bEn.key << Strings::tr(Strings::OUT_MISSES_OPTIONAL)
+          << current << "\"" << std::endl;
     }
   }
 }
@@ -533,8 +534,8 @@ void Bibliography::show_missing_fields(std::vector<string> fields) const
   for (const bibEntry& bEn : bib) {
     for (string& current : fields) {
       if (get_field_value(bEn, current).empty())
-        std::cout << bEn.key << " misses field \"" << current << "\""
-          << std::endl;
+        std::cout << bEn.key << Strings::tr(Strings::OUT_MISSING_FIELD)
+          << current << "\"" << std::endl;
     }
   }
 }

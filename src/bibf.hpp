@@ -25,6 +25,6 @@
 std::vector<std::string> separate_string(std::string s);
 
 // Localize the output
-Strings localize_strings()
+void localize_strings()
 
 #endif

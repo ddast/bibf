@@ -44,25 +44,21 @@ std::vector<std::string> separate_string(std::string s)
   return result;
 }
 
-Strings localize_strings()
+void localize_strings()
 {
   // read environment variable LANG
   std::string lang = std::getenv("LANG");
-  // create Strings object
-  Strings strs;
   // if LANG is not set use default language (english)
   if (lang.empty())
-    return strs;
+    return;
   // extract the part before _
   auto i = lang.find("_");
   // use default language if LANG has unknown format
   if (i == std::string::npos)
-    return strs;
+    return;
   lang = lang.substr(0, i);
   // set language
-  strs.set_locale(lang);
-
-  return strs;
+  Strings::set_locale(lang);
 }
 
 
@@ -70,41 +66,43 @@ int main(int argc, char* argv[])
 {
   try {
     // set language
-    Strings str = localize_strings();
+    localize_strings();
 
     // visible command line options
-    po::options_description visible(str.tr(Strings::OPT_USAGE));
+    po::options_description visible(Strings::tr(Strings::OPT_USAGE));
     visible.add_options()
       ("output,o", po::value<std::string>(),
-        str.tr(Strings::OPT_OUTPUT).c_str())
-      ("create-keys,c", str.tr(Strings::OPT_CREATE).c_str())
-      ("only,O", po::value<std::string>(), str.tr(Strings::OPT_ONLY).c_str())
+        Strings::tr(Strings::OPT_OUTPUT).c_str())
+      ("create-keys,c", Strings::tr(Strings::OPT_CREATE).c_str())
+      ("only,O", po::value<std::string>(),
+        Strings::tr(Strings::OPT_ONLY).c_str())
       ("sort-bib,s", po::value<std::string>(),
-        str.tr(Strings::OPT_SORT_BIB).c_str())
-      ("sort-elements,S", str.tr(Strings::OPT_SORT_ELEMENTS).c_str())
+        Strings::tr(Strings::OPT_SORT_BIB).c_str())
+      ("sort-elements,S", Strings::tr(Strings::OPT_SORT_ELEMENTS).c_str())
       ("erase-field,e", po::value<std::string>(),
-        str.tr(Strings::OPT_ERASE_FIELD).c_str())
+        Strings::tr(Strings::OPT_ERASE_FIELD).c_str())
       ("show-missing,m", po::value<char>()->implicit_value('R'),
-        str.tr(Strings::OPT_SHOW_MISSING).c_str())
+        Strings::tr(Strings::OPT_SHOW_MISSING).c_str())
       ("missing-fields,M", po::value<std::string>(),
-        str.tr(Strings::OPT_MISSING_FIELDS).c_str())
+        Strings::tr(Strings::OPT_MISSING_FIELDS).c_str())
       ("change-case", po::value<std::string>()->implicit_value("L"),
-        str.tr(Strings::OPT_CHANGE_CASE).c_str())
+        Strings::tr(Strings::OPT_CHANGE_CASE).c_str())
       ("linebreak", po::value<unsigned int>(),
-        str.tr(Strings::OPT_LINEBREAK).c_str())
+        Strings::tr(Strings::OPT_LINEBREAK).c_str())
       ("intendation", po::value<std::string>(),
-        str.tr(Strings::OPT_INTENDATION).c_str())
-      ("delimiter", po::value<char>(), str.tr(Strings::OPT_DELIMITER).c_str())
-      ("abbrev-month", str.tr(Strings::OPT_ABBREV_MONTH).c_str())
-      ("help", str.tr(Strings::OPT_HELP).c_str())
-      ("version", str.tr(Strings::OPT_VERSION).c_str())
+        Strings::tr(Strings::OPT_INTENDATION).c_str())
+      ("delimiter", po::value<char>(),
+        Strings::tr(Strings::OPT_DELIMITER).c_str())
+      ("abbrev-month", Strings::tr(Strings::OPT_ABBREV_MONTH).c_str())
+      ("help", Strings::tr(Strings::OPT_HELP).c_str())
+      ("version", Strings::tr(Strings::OPT_VERSION).c_str())
     ;
 
     // hidden command line options
     po::options_description hidden;
     hidden.add_options()
       ("input-files", po::value< std::vector<std::string> >(),
-        str.tr(Strings::OPT_INPUT).c_str())
+        Strings::tr(Strings::OPT_INPUT).c_str())
     ;
     // positional options are interpreted as input-file
     po::positional_options_description pod;
@@ -128,7 +126,7 @@ int main(int argc, char* argv[])
 
     // version message
     if (vm.count("version")) {
-      cout << str.tr(Strings::OUT_VERSION);
+      cout << Strings::tr(Strings::OUT_VERSION);
       return 0;
     }
 
@@ -163,7 +161,7 @@ int main(int argc, char* argv[])
       else if (cases.length() == 2)
         bib.change_case(cases[0], cases[1]);
       else {
-        std::cerr << str.tr(Strings::ERR_CHANGE_CASE);
+        std::cerr << Strings::tr(Strings::ERR_CHANGE_CASE);
         return 1;
       }
     }
@@ -184,7 +182,7 @@ int main(int argc, char* argv[])
       else if (delim == '"')
         bib.set_field_delimiter('"', '"');
       else
-        std::cerr << str.tr(Strings::ERR_DELIMITER) << delim << "\n";
+        std::cerr << Strings::tr(Strings::ERR_DELIMITER) << delim << "\n";
     }
 
     // abbreviate months

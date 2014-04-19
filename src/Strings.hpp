@@ -49,22 +49,35 @@ class Strings
       OPT_VERSION,
       OPT_INPUT,
       OUT_VERSION,
+      OUT_MISSES_REQUIRED,
+      OUT_MISSES_OPTIONAL,
+      OUT_MISSING_FIELD,
       ERR_CHANGE_CASE,
-      ERR_DELIMITER
+      ERR_DELIMITER,
+      ERR_EMPTY_AUTHOR,
+      ERR_DOUBLE_KEY_1,
+      ERR_DOUBLE_KEY_2,
+      ERR_RAN_OUT_OF_IDS_1,
+      ERR_RAN_OUT_OF_IDS_2,
+      ERR_RAN_OUT_OF_IDS_3,
+      ERR_UNKNOWN_CHANGE_CASE_T,
+      ERR_UNKNOWN_CHANGE_CASE_F,
+      ERR_ILLEGAL_FIELD_DELIMITER_BEG,
+      ERR_ILLEGAL_FIELD_DELIMITER_END
     };
 
     // set the current locale
-    void set_locale(std::string lang);
+    static void set_locale(std::string lang);
 
     // returns the string in the current language
-    std::string tr(STR str) { return langs[current_lang][str]; }
+    static std::string tr(STR str) { return langs[current_lang][str]; }
 
   private:
     // supported language count
     static const int LANG_CNT = 2;
 
-    // translated strings count
-    static const int STR_CNT = 20;
+    // strings count
+    static const int STR_CNT = 33;
 
     // supported languages
     enum LANG {
@@ -75,8 +88,8 @@ class Strings
     // map to translage between a string the the enum
     static const std::unordered_map<std::string, LANG> lang_map;
 
-    // current language
-    LANG current_lang = LANG::LANG_EN;
+    // current language (default english)
+    static LANG current_lang;
 
     // strings in different languages
     static const std::array<std::string, STR_CNT> en;
