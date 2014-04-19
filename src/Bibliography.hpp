@@ -149,6 +149,11 @@ class Bibliography
     // Do some basic consistency checking
     bool check_consistency() const;
 
+    // Insert line breaks into 'str' such that every line contains 'linebreak'
+    // characters or less. Insert 'intend' before every new line.
+    std::string break_string(std::string str, const std::string &intend) const;
+
+
 };
 
 #endif

@@ -90,7 +90,7 @@ string Bibliography::clean_key(string key) const
   // delete all not allowed keys
   while (true) {
     size_t pos = key.find_first_not_of(allowed);
-    if (pos == std::string::npos)
+    if (pos == string::npos)
       break;
     key.erase(pos, 1);
   }
@@ -242,7 +242,7 @@ void Bibliography::print_bib(std::vector<string> only, std::ostream &os) const
       if (is_numerical(bEl.value))
         print_delimiter = false;
       // Or if the month field uses three-letter abbreviations
-      std::string field = bEl.field;
+      string field = bEl.field;
       std::transform(field.begin(), field.end(), field.begin(), ::tolower);
       if ( (field == "month") &&
           Constants::is_valid_month_abbreviation(bEl.value) )
@@ -255,28 +255,52 @@ void Bibliography::print_bib(std::vector<string> only, std::ostream &os) const
           line.push_back(' ');
       }
       line += intend + bEl.field + " = ";
-      std::string intend_after_break;
+      string intend_after_break;
       for (unsigned int i = 0, length = line.length(); i < length; ++i)
         intend_after_break.push_back(' ');
       if (print_delimiter)
         line += field_beg + bEl.value + field_end;
       else
         line += bEl.value;
-      // break after 'linebreak' characters and use double intend in next line
-      if (line.length() >= linebreak) {
-        for (unsigned int i = line.length()-1; i > intend.length(); --i) {
-          if ((line[i] == ' ') && (i <= linebreak)) {
-            line[i] = '\n';
-            line.insert(i+1, intend_after_break);
-            break;
-          }
-        }
-      }
+      // break after 'linebreak' characters
+      line = break_string(line, intend_after_break);
       os << line;
     }
     // finish entry
     os << "\n}\n" << std::endl;
   }
+}
+
+string Bibliography::break_string(string str, const string &intend) const
+{
+  // store each line in a vector
+  std::vector<string> lines;
+  // break until 'str' is small enough
+  while (str.length() > linebreak) {
+    // find the first space before linebreak
+    for (unsigned int i = linebreak; i > 0; --i) {
+      if (str[i] == ' ') {
+        // replace it with a line break
+        str[i] = '\n';
+        // store line including line break in 'lines'
+        lines.push_back(str.substr(0,i+1));
+        // delete the line in 'str'
+        str.erase(0,i+1);
+        // add 'intend' to the beginning
+        str = intend + str;
+        // exit for loop
+        break;
+      }
+    }
+  }
+
+  // create one string containing all lines
+  string result("");
+  for (const string &l: lines)
+    result += l;
+  // don't forget the rest in str
+  result += str;
+  return result;
 }
 
 Bibliography::Bibliography() :
@@ -322,7 +346,7 @@ string Bibliography::get_field_value(const bibEntry &bE, string field) const
   std::transform(field.begin(), field.end(), field.begin(), ::tolower);
   // search for entry
   for (const bibElement& bEl : bE.element) {
-    std::string current = bEl.field;
+    string current = bEl.field;
     std::transform(current.begin(), current.end(), current.begin(), ::tolower);
     if (current == field)
       return bEl.value;
@@ -467,7 +491,7 @@ void Bibliography::sort_elements()
   }
 }
 
-void Bibliography::set_intendation(const std::string& str)
+void Bibliography::set_intendation(const string& str)
 {
   // check for consitency and set intendation
   intend = str;
@@ -550,7 +574,7 @@ void Bibliography::abbreviate_month()
   // try to find the correct abbreviation
   for (bibEntry& bEn : bib) {
     for (bibElement& bEl : bEn.element) {
-      std::string field = bEl.field;
+      string field = bEl.field;
       std::transform(field.begin(), field.end(), field.begin(), ::tolower);
       if (field == "month")
         bEl.value = Constants::find_month_abbreviation(bEl.value);

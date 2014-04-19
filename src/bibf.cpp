@@ -61,7 +61,6 @@ void localize_strings()
   Strings::set_locale(lang);
 }
 
-
 int main(int argc, char* argv[])
 {
   try {
