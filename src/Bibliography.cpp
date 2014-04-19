@@ -307,7 +307,7 @@ bool Bibliography::check_consistency() const
     for (auto it2 = it1+1; it2 != end; ++it2) {
       if (it1->key == it2->key) {
         std::cerr << Strings::tr(Strings::ERR_DOUBLE_KEY_1) << it1->key
-          << Strings::tr(Strings::ERR_DOUBLE_KEY_2) ;
+          << Strings::tr(Strings::ERR_DOUBLE_KEY_2);
         is_consistent = false;
       }
     }
