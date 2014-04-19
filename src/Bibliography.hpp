@@ -75,6 +75,9 @@ class Bibliography
     // Set field delimiter
     void set_field_delimiter(char beg, char end);
 
+    // Set alignment
+    void set_alignment(bool _right_aligned);
+
     // Print the bibliography to std::cout
     void print_bib(std::ostream &os) const;
 
@@ -112,7 +115,7 @@ class Bibliography
     char field_beg;
     char field_end;
 
-    // Use left or right alignment for the field names
+    // Use left or right alignment for the field names (default right)
     bool right_aligned;
     
     // Extracts characters from 'is' and stores them into 'str' until the block

@@ -484,6 +484,11 @@ void Bibliography::set_linebreak(unsigned int i)
     linebreak = 0;
 }
 
+void Bibliography::set_alignment(bool _right_aligned)
+{
+  right_aligned = _right_aligned;
+}
+
 void Bibliography::set_field_delimiter(char beg, char end)
 {
   // only {} and '' are valid delimiters but always set the delimiters

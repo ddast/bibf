@@ -93,6 +93,7 @@ int main(int argc, char* argv[])
         Strings::tr(Strings::OPT_INTENDATION).c_str())
       ("delimiter", po::value<char>(),
         Strings::tr(Strings::OPT_DELIMITER).c_str())
+      ("align-left", Strings::tr(Strings::OPT_ALIGN_LEFT).c_str())
       ("abbrev-month", Strings::tr(Strings::OPT_ABBREV_MONTH).c_str())
       ("help", Strings::tr(Strings::OPT_HELP).c_str())
       ("version", Strings::tr(Strings::OPT_VERSION).c_str())
@@ -183,6 +184,12 @@ int main(int argc, char* argv[])
         bib.set_field_delimiter('"', '"');
       else
         std::cerr << Strings::tr(Strings::ERR_DELIMITER) << delim << "\n";
+    }
+
+    // alignment
+    if (vm.count("align-left")) {
+      bool right_aligned = false;
+      bib.set_alignment(right_aligned);
     }
 
     // abbreviate months

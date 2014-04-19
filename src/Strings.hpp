@@ -44,6 +44,7 @@ class Strings
       OPT_LINEBREAK,
       OPT_INTENDATION,
       OPT_DELIMITER,
+      OPT_ALIGN_LEFT,
       OPT_ABBREV_MONTH,
       OPT_HELP,
       OPT_VERSION,
@@ -63,7 +64,8 @@ class Strings
       ERR_UNKNOWN_CHANGE_CASE_T,
       ERR_UNKNOWN_CHANGE_CASE_F,
       ERR_ILLEGAL_FIELD_DELIMITER_BEG,
-      ERR_ILLEGAL_FIELD_DELIMITER_END
+      ERR_ILLEGAL_FIELD_DELIMITER_END,
+      STR_CNT
     };
 
     // set the current locale
@@ -73,18 +75,13 @@ class Strings
     static std::string tr(STR str) { return langs[current_lang][str]; }
 
   private:
-    // supported language count
-    static const int LANG_CNT = 2;
-
-    // strings count
-    static const int STR_CNT = 33;
-
     // supported languages
     enum LANG {
       LANG_EN,
-      LANG_DE
+      LANG_DE,
+      LANG_CNT
     };
- 
+
     // map to translage between a string the the enum
     static const std::unordered_map<std::string, LANG> lang_map;
 
