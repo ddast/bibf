@@ -21,12 +21,8 @@
 #ifndef BIBLIOGRAPHY_H
 #define BIBLIOGRAPHY_H
 
-#include <string>
 #include <vector>
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <algorithm>
+#include "DataStructure.hpp"
 
 class Bibliography
 {
@@ -88,19 +84,6 @@ class Bibliography
     void abbreviate_month();
 
   private:
-    struct bibElement
-    {
-      std::string field;
-      std::string value;
-    };
-    
-    struct bibEntry
-    {
-      std::string type;
-      std::string key;
-      std::vector<bibElement> element;
-    };
-
     // Internal representation of the bibliography
     std::vector<bibEntry> bib;
 
@@ -152,7 +135,6 @@ class Bibliography
     // Insert line breaks into 'str' such that every line contains 'linebreak'
     // characters or less. Insert 'intend' before every new line.
     std::string break_string(std::string str, const std::string &intend) const;
-
 
 };
 

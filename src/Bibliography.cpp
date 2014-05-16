@@ -18,6 +18,11 @@
  *  along with bibf.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <string>
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <algorithm>
 #include "Bibliography.hpp"
 #include "Constants.hpp"
 #include "Strings.hpp"
@@ -123,6 +128,7 @@ istream& Bibliography::get_bibEntry(istream& is, bibEntry& bEn) const
       else last = true;
     }
     // extract element
+    std::cout << bEl_s << std::endl;
     stringstream bEl_ss(bEl_s);
     bibElement bEl;
     // field is the part before '='
