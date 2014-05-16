@@ -101,18 +101,6 @@ class Bibliography
     // Use left or right alignment for the field names (default right)
     bool right_aligned;
     
-    // Extracts characters from 'is' and stores them into 'str' until the block
-    // ends. A block is denoted by '}' and the block may contain pairs of
-    // parenthesis.
-    std::istream& get_block(std::istream& is, std::string& str) const;
-    
-    // Extracts characters from 'is' and stores them into 'str' until an
-    // unnested ',' is found, i.e. one that is not inside parenthesis.
-    std::istream& get_unnested(std::istream& is, std::string& str) const;
-    
-    // Reads one bibtex entry from 'is' and stores it into 'bEn'
-    std::istream& get_bibEntry(std::istream& is, bibEntry& bEn) const;
-
     // Returns the last name of the first author
     std::string get_lastname(std::string author) const;
 
