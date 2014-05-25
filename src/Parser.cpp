@@ -18,6 +18,21 @@
  *  along with bibf.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <string>
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <algorithm>
+#include "DataStructure.hpp"
+#include "Parser.hpp"
+#include "Bibliography.hpp"
+#include "Constants.hpp"
+#include "Strings.hpp"
+
+using std::istream;
+using std::string;
+using std::stringstream;
+
 istream& Parser::get_block(istream& is, string& str) const
 {
     stringstream block;
