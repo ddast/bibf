@@ -18,15 +18,6 @@
  *  along with bibf.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Bibliography.hpp"
-#include "Strings.hpp"
-#include <boost/program_options.hpp>
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <string>
-#include <sstream>
-#include <map>
 #include "bibf.hpp"
 
 namespace po = boost::program_options;
