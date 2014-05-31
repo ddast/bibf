@@ -18,20 +18,43 @@
  *  along with bibf.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <string>
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <algorithm>
-#include "DataStructure.hpp"
 #include "Parser.hpp"
-#include "Bibliography.hpp"
-#include "Constants.hpp"
-#include "Strings.hpp"
 
 using std::istream;
 using std::string;
 using std::stringstream;
+
+
+void Parser::add(istream &is, std::vector<bibEntry> &bib)
+{
+  // add the stream to 'bib'
+  for (bibEntry bE; get_bibEntry(is, bE); bE.element.clear())
+    bib.push_back(bE);
+}
+
+
+string Parser::clean_string(string str) const
+{
+  // Replace all nonprintable characters with spaces
+  auto del_from = std::remove_if(str.begin(), str.end(),
+      [] (char c) -> bool { return !isprint(c); });
+  str.erase(del_from, str.end());
+
+  // Remove double spaces
+  del_from = std::unique(str.begin(), str.end(),
+      [] (char c1, char c2) { return (c1 == c2 && c1 == ' '); } );
+  str.erase(del_from, str.end());
+
+  // Delete leading and ending spaces
+  size_t first = str.find_first_not_of(" ");
+  if (first == string::npos)
+    return "";
+  size_t last = str.find_last_not_of(" ");
+  str = str.substr(first, last-first+1);
+
+  return str;
+}
+
 
 istream& Parser::get_block(istream& is, string& str) const
 {

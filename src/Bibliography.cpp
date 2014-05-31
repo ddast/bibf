@@ -18,14 +18,7 @@
  *  along with bibf.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <string>
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <algorithm>
 #include "Bibliography.hpp"
-#include "Constants.hpp"
-#include "Strings.hpp"
 
 using std::istream;
 using std::string;
@@ -53,6 +46,7 @@ string Bibliography::clean_string(string str) const
   return str;
 }
 
+
 string Bibliography::clean_key(string key) const
 {
   // allowed characters in key
@@ -70,6 +64,7 @@ string Bibliography::clean_key(string key) const
 
   return key;
 }
+
 
 string Bibliography::get_lastname(string author) const
 {
@@ -102,6 +97,7 @@ string Bibliography::get_lastname(string author) const
   return author;
 }
 
+
 bool Bibliography::is_numerical(const string& s) const
 {
   size_t found = s.find_first_not_of("1234567890");
@@ -114,6 +110,7 @@ void Bibliography::print_bib(std::ostream &os) const
   std::vector<string> empty;
   print_bib(empty, os);
 }
+
 
 void Bibliography::print_bib(std::vector<string> only, std::ostream &os) const
 {
@@ -187,6 +184,7 @@ void Bibliography::print_bib(std::vector<string> only, std::ostream &os) const
   }
 }
 
+
 string Bibliography::break_string(string str, const string &intend) const
 {
   // store each line in a vector
@@ -219,6 +217,7 @@ string Bibliography::break_string(string str, const string &intend) const
   return result;
 }
 
+
 Bibliography::Bibliography() :
   intend("  "),
   linebreak(79),
@@ -227,11 +226,14 @@ Bibliography::Bibliography() :
   right_aligned(true)
 { }
 
+
 void Bibliography::add(istream &is)
 {
+  // create parsing object
+  Parser parser;
+
   // add the stream to the bibliography
-  for (bibEntry bE; get_bibEntry(is, bE); bE.element.clear())
-    bib.push_back(bE);
+  parser.add(is, bib);
 
   // do a consistency check
   check_consistency();
@@ -255,6 +257,7 @@ bool Bibliography::check_consistency() const
 
   return is_consistent;
 }
+
 
 string Bibliography::get_field_value(const bibEntry &bE, string field) const
 {
@@ -293,6 +296,7 @@ void Bibliography::create_keys()
     it->key = clean_key(it->key);
   }
 }
+
 
 void Bibliography::change_case(const char case_t, const char case_f)
 {
@@ -353,6 +357,7 @@ void Bibliography::erase_field(string field)
         compare), bEn.element.end() );
 }
 
+
 void Bibliography::sort_bib(std::vector<string> criteria)
 {
   // check if 'bE1' is smaller than 'bE2' using the given criteria
@@ -390,6 +395,7 @@ void Bibliography::sort_bib(std::vector<string> criteria)
   //bib.sort(cmp_after_criteria);
 }
 
+
 void Bibliography::sort_elements()
 {
   // define compare function
@@ -407,6 +413,7 @@ void Bibliography::sort_elements()
   }
 }
 
+
 void Bibliography::set_intendation(const string& str)
 {
   // check for consitency and set intendation
@@ -414,6 +421,7 @@ void Bibliography::set_intendation(const string& str)
   if (intend.length()+1 >= linebreak)
     linebreak = intend.length()+1;
 }
+
 
 void Bibliography::set_linebreak(unsigned int i)
 {
@@ -424,10 +432,12 @@ void Bibliography::set_linebreak(unsigned int i)
     linebreak = 0;
 }
 
+
 void Bibliography::set_alignment(bool _right_aligned)
 {
   right_aligned = _right_aligned;
 }
+
 
 void Bibliography::set_field_delimiter(char beg, char end)
 {
@@ -441,6 +451,7 @@ void Bibliography::set_field_delimiter(char beg, char end)
     std::cerr << Strings::tr(Strings::ERR_ILLEGAL_FIELD_DELIMITER_END)
       << beg << std::endl;
 }
+
 
 void Bibliography::show_missing_fields(bool only_required) const
 {
@@ -474,6 +485,7 @@ void Bibliography::show_missing_fields(bool only_required) const
   }
 }
 
+
 void Bibliography::show_missing_fields(std::vector<string> fields) const
 {
   for (const bibEntry& bEn : bib) {
@@ -484,6 +496,7 @@ void Bibliography::show_missing_fields(std::vector<string> fields) const
     }
   }
 }
+
 
 void Bibliography::abbreviate_month()
 {

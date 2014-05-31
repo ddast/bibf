@@ -22,7 +22,15 @@
 #define BIBLIOGRAPHY_H
 
 #include <vector>
+#include <string>
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <algorithm>
 #include "DataStructure.hpp"
+#include "Parser.hpp"
+#include "Constants.hpp"
+#include "Strings.hpp"
 
 class Bibliography
 {
@@ -74,7 +82,7 @@ class Bibliography
     // Set alignment
     void set_alignment(bool _right_aligned);
 
-    // Print the bibliography to std::cout
+    // Print the bibliography to the stream 'os'
     void print_bib(std::ostream &os) const;
 
     // Print only the field defined in 'print_only' (case insensitive)
@@ -108,6 +116,7 @@ class Bibliography
     // 'field' is case insensitive
     std::string get_field_value(const bibEntry& bE, std::string field) const;
 
+    // WARNING: DUPLICATE IN PARSER.CPP
     // Deletes all double spaces, leading/ending spaces and nonprintable
     // characters in 'str'
     std::string clean_string(std::string str) const;

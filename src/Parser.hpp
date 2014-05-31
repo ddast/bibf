@@ -21,11 +21,27 @@
 #ifndef PARSER_H
 #define PARSER_H
 
+#include <string>
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <algorithm>
+#include "DataStructure.hpp"
+#include "Bibliography.hpp"
+#include "Constants.hpp"
+#include "Strings.hpp"
+
 class Parser
 {
   public:
+    // Parse the content of the stream 'is' and add it to 'bib'
+    void add(std::istream &is, std::vector<bibEntry> &bib);
 
   private:
+    // Deletes all double spaces, leading/ending spaces and nonprintable
+    // characters in 'str'
+    std::string clean_string(std::string str) const;
+
     // Extracts characters from 'is' and stores them into 'str' until the block
     // ends. A block is denoted by '}' and the block may contain pairs of
     // parenthesis.
