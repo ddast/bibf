@@ -113,7 +113,6 @@ istream& Parser::get_bibEntry(istream& is, bibEntry& bEn) const
       else last = true;
     }
     // extract element
-    std::cout << bEl_s << std::endl;
     stringstream bEl_ss(bEl_s);
     bibElement bEl;
     // field is the part before '='
