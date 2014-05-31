@@ -21,6 +21,16 @@
 #ifndef BIBF_H
 #define BIBF_H
 
+#include "Bibliography.hpp"
+#include "Strings.hpp"
+#include <boost/program_options.hpp>
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <string>
+#include <sstream>
+#include <map>
+
 // Separate comma separated list of words into a vector of words
 std::vector<std::string> separate_string(std::string s)
 
@@ -28,6 +38,6 @@ std::vector<std::string> separate_string(std::string s)
 std::vector<std::string> separate_string(std::string s);
 
 // Localize the output
-void localize_strings()
+void localize_strings();
 
 #endif

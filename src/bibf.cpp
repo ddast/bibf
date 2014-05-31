@@ -27,6 +27,7 @@
 #include <string>
 #include <sstream>
 #include <map>
+#include "bibf.hpp"
 
 namespace po = boost::program_options;
 
