@@ -21,6 +21,9 @@
 #ifndef BIBF_H
 #define BIBF_H
 
+// Separate comma separated list of words into a vector of words
+std::vector<std::string> separate_string(std::string s)
+
 // Converts a string with comma separated parts into a vector
 std::vector<std::string> separate_string(std::string s);
 
