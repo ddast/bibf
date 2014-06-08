@@ -116,6 +116,7 @@ class Bibliography
     // 'field' is case insensitive
     std::string get_field_value(const bibEntry& bE, std::string field) const;
 
+    // Removes all characters not allowed in the key of a bibtex entry
     std::string clean_key(std::string key) const;
 
     // Checks if the given string is a numerical value
