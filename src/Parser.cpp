@@ -74,16 +74,38 @@ istream& Parser::get_block(istream& is, string& str) const
 istream& Parser::get_unnested(istream& is, string& str) const
 {
   stringstream unnested;
-  int depth = 0;
+  int depth(0);
   for (char c; is.get(c);) {
-    if (c == '{')
+
+    // a leading quotation mark increases the depth, an ending one decreases it
+    bool use_quotes = false;
+    if (c == '"') {
+     if (depth == 0) {
       ++depth;
-    else if (c == '}')
+      use_quotes = true;
+     }
+     else if ( (depth == 1) && (use_quotes) ) {
+       --depth;
+     }
+    }
+
+    // increase depth at { and decrease at }
+    else if (c == '{') {
+      ++depth;
+    }
+    else if (c == '}') {
       --depth;
-    else if ((c == ',') && !depth)
+    }
+
+    // stop if we are at depth zero and a comma is found
+    else if ((c == ',') && !depth) {
       break;
+    }
+
+    // add character to unnested
     unnested << c;
   }
+
   str = unnested.str();
   return is;
 }
