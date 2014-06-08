@@ -20,29 +20,6 @@
 
 #include "Bibliography.hpp"
 
-std::string Bibliography::clean_string(std::string str) const
-{
-  // Replace all nonprintable characters with spaces
-  auto del_from = std::remove_if(str.begin(), str.end(),
-      [] (char c) -> bool { return !isprint(c); });
-  str.erase(del_from, str.end());
-
-  // Remove double spaces
-  del_from = std::unique(str.begin(), str.end(),
-      [] (char c1, char c2) { return (c1 == c2 && c1 == ' '); } );
-  str.erase(del_from, str.end());
-
-  // Delete leading and ending spaces
-  size_t first = str.find_first_not_of(" ");
-  if (first == std::string::npos)
-    return "";
-  size_t last = str.find_last_not_of(" ");
-  str = str.substr(first, last-first+1);
-
-  return str;
-}
-
-
 std::string Bibliography::clean_key(std::string key) const
 {
   // allowed characters in key
@@ -68,7 +45,6 @@ std::string Bibliography::get_lastname(std::string author) const
   size_t found = author.find("and");
   if (found != std::string::npos)
     author = author.substr(0, found);
-  author = clean_string(author);
 
   // get last name
   found = author.find(",");
