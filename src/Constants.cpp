@@ -20,8 +20,6 @@
 
 #include "Constants.hpp"
 
-using std::string;
-
 typedef std::vector<int> veci;
 typedef std::pair<veci, veci> pveci;
 
@@ -55,7 +53,7 @@ const std::array<std::string, 27> Constants::standard_entry_fields {{
   /*26*/ "chapter pages"
 }};
 
-const std::map<string, pveci> Constants::standard_types {
+const std::map<std::string, pveci> Constants::standard_types {
   {"article", pveci(veci{2, 20, 10, 23}, veci{22, 14, 16, 12, 13})},
   {"book", pveci(veci{24, 20, 17, 23}, veci{25, 19, 0, 6, 12, 13})},
   {"booklet", pveci(veci{20}, veci{0, 8, 0, 12, 23, 13})},
@@ -79,10 +77,10 @@ const std::array<std::string, 12> Constants::month_abbreviations {{
 }};
 
 
-std::vector<string> Constants::get_required_values(std::string type)
+std::vector<std::string> Constants::get_required_values(std::string type)
 {
   std::transform(type.begin(), type.end(), type.begin(), ::tolower);
-  std::vector<string> required;
+  std::vector<std::string> required;
   auto it = standard_types.find(type);
   if (it != standard_types.end())
     for (int i : it->second.first)
@@ -90,10 +88,10 @@ std::vector<string> Constants::get_required_values(std::string type)
   return required;
 }
 
-std::vector<string> Constants::get_optional_values(std::string type)
+std::vector<std::string> Constants::get_optional_values(std::string type)
 {
   std::transform(type.begin(), type.end(), type.begin(), ::tolower);
-  std::vector<string> optional;
+  std::vector<std::string> optional;
   auto it = standard_types.find(type);
   if (it != standard_types.end())
     for (int i : it->second.second)

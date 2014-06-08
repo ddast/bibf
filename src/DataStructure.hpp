@@ -18,26 +18,23 @@
  *  along with bibf.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef BIBF_H
-#define BIBF_H
+#ifndef DATASTRUCTURE_H
+#define DATASTRUCTURE_H
 
-#include <boost/program_options.hpp>
-#include <iostream>
-#include <fstream>
-#include <vector>
 #include <string>
-#include <sstream>
-#include <map>
-#include "Bibliography.hpp"
-#include "Strings.hpp"
+#include <vector>
 
-// Separate comma separated list of words into a vector of words
-std::vector<std::string> separate_string(std::string s);
+struct bibElement
+{
+  std::string field;
+  std::string value;
+};
 
-// Converts a string with comma separated parts into a vector
-std::vector<std::string> separate_string(std::string s);
-
-// Localize the output
-void localize_strings();
+struct bibEntry
+{
+  std::string type;
+  std::string key;
+  std::vector<bibElement> element;
+};
 
 #endif

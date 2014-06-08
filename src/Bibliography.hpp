@@ -21,12 +21,16 @@
 #ifndef BIBLIOGRAPHY_H
 #define BIBLIOGRAPHY_H
 
-#include <string>
 #include <vector>
+#include <string>
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <algorithm>
+#include "DataStructure.hpp"
+#include "Parser.hpp"
+#include "Constants.hpp"
+#include "Strings.hpp"
 
 class Bibliography
 {
@@ -78,7 +82,7 @@ class Bibliography
     // Set alignment
     void set_alignment(bool _right_aligned);
 
-    // Print the bibliography to std::cout
+    // Print the bibliography to the stream 'os'
     void print_bib(std::ostream &os) const;
 
     // Print only the field defined in 'print_only' (case insensitive)
@@ -88,19 +92,6 @@ class Bibliography
     void abbreviate_month();
 
   private:
-    struct bibElement
-    {
-      std::string field;
-      std::string value;
-    };
-    
-    struct bibEntry
-    {
-      std::string type;
-      std::string key;
-      std::vector<bibElement> element;
-    };
-
     // Internal representation of the bibliography
     std::vector<bibEntry> bib;
 
@@ -118,18 +109,6 @@ class Bibliography
     // Use left or right alignment for the field names (default right)
     bool right_aligned;
     
-    // Extracts characters from 'is' and stores them into 'str' until the block
-    // ends. A block is denoted by '}' and the block may contain pairs of
-    // parenthesis.
-    std::istream& get_block(std::istream& is, std::string& str) const;
-    
-    // Extracts characters from 'is' and stores them into 'str' until an
-    // unnested ',' is found, i.e. one that is not inside parenthesis.
-    std::istream& get_unnested(std::istream& is, std::string& str) const;
-    
-    // Reads one bibtex entry from 'is' and stores it into 'bEn'
-    std::istream& get_bibEntry(std::istream& is, bibEntry& bEn) const;
-
     // Returns the last name of the first author
     std::string get_lastname(std::string author) const;
 
@@ -137,6 +116,7 @@ class Bibliography
     // 'field' is case insensitive
     std::string get_field_value(const bibEntry& bE, std::string field) const;
 
+    // WARNING: DUPLICATE IN PARSER.CPP
     // Deletes all double spaces, leading/ending spaces and nonprintable
     // characters in 'str'
     std::string clean_string(std::string str) const;
@@ -152,7 +132,6 @@ class Bibliography
     // Insert line breaks into 'str' such that every line contains 'linebreak'
     // characters or less. Insert 'intend' before every new line.
     std::string break_string(std::string str, const std::string &intend) const;
-
 
 };
 

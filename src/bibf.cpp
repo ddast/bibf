@@ -22,10 +22,6 @@
 
 namespace po = boost::program_options;
 
-using std::cout;
-using std::cerr;
-using std::endl;
-
 std::vector<std::string> separate_string(std::string s)
 {
   std::vector<std::string> result;
@@ -112,13 +108,13 @@ int main(int argc, char* argv[])
 
     // help message
     if (vm.count("help")) {
-      cout << visible << "\n";
+      std::cout << visible << "\n";
       return 0;
     }
 
     // version message
     if (vm.count("version")) {
-      cout << Strings::tr(Strings::OUT_VERSION);
+      std::cout << Strings::tr(Strings::OUT_VERSION);
       return 0;
     }
 
@@ -253,11 +249,11 @@ int main(int argc, char* argv[])
 
   }
   catch(std::exception& e) {
-    cerr << "error: " << e.what() << "\n";
+    std::cerr << "error: " << e.what() << "\n";
     return 1;
   }
   catch(...) {
-    cerr << "Unknown exception.\n";
+    std::cerr << "Unknown exception.\n";
     return 1;
   }
 
