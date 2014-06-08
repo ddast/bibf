@@ -1,8 +1,7 @@
 Wichtig:
       neuen Eintrag generieren
-      Sonderzeichen ersetzen
+      Sonderzeichen ersetzen (clean_strings)
       Fehlerbehandlung überarbeiten
-      Parser auslagern
 
 Unwichtig:
       suchen und ersetzen in bestimmtem Feld
@@ -11,4 +10,13 @@ Unwichtig:
 
 Cool aber aufwändig:
       anpassbare Keys generieren
+
+
+Beispielcode zum Umlaute ersetzen:
+  std::string umlaut = "ä";
+  auto found = str.find(umlaut);
+  if (found != std::string::npos) {
+    auto len = umlaut.length();
+    str.replace(found, len, "{\\\"{a}}");
+  }
 

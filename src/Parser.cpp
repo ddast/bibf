@@ -70,18 +70,20 @@ std::istream& Parser::get_unnested(std::istream& is, std::string& str) const
 {
   std::stringstream unnested;
   int depth(0);
+  bool use_quotes = false;
+
+  // iterate over all characters
   for (char c; is.get(c);) {
 
     // a leading quotation mark increases the depth, an ending one decreases it
-    bool use_quotes = false;
     if (c == '"') {
-     if (depth == 0) {
-      ++depth;
-      use_quotes = true;
-     }
-     else if ( (depth == 1) && (use_quotes) ) {
+      if (depth == 0) {
+        ++depth;
+        use_quotes = true;
+      }
+      else if ( (depth == 1) && (use_quotes) ) {
        --depth;
-     }
+      }
     }
 
     // increase depth at { and decrease at }
