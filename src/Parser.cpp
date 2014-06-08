@@ -20,12 +20,7 @@
 
 #include "Parser.hpp"
 
-using std::istream;
-using std::string;
-using std::stringstream;
-
-
-void Parser::add(istream &is, std::vector<bibEntry> &bib)
+void Parser::add(std::istream &is, std::vector<bibEntry> &bib)
 {
   // add the stream to 'bib'
   for (bibEntry bE; get_bibEntry(is, bE); bE.element.clear())
@@ -33,7 +28,7 @@ void Parser::add(istream &is, std::vector<bibEntry> &bib)
 }
 
 
-string Parser::clean_string(string str) const
+std::string Parser::clean_string(std::string str) const
 {
   // Replace all nonprintable characters with spaces
   auto del_from = std::remove_if(str.begin(), str.end(),
@@ -47,7 +42,7 @@ string Parser::clean_string(string str) const
 
   // Delete leading and ending spaces
   size_t first = str.find_first_not_of(" ");
-  if (first == string::npos)
+  if (first == std::string::npos)
     return "";
   size_t last = str.find_last_not_of(" ");
   str = str.substr(first, last-first+1);
@@ -56,9 +51,9 @@ string Parser::clean_string(string str) const
 }
 
 
-istream& Parser::get_block(istream& is, string& str) const
+std::istream& Parser::get_block(std::istream& is, std::string& str) const
 {
-    stringstream block;
+    std::stringstream block;
     int depth = 1;
     for (char c; is.get(c);) {
       if (c == '{')
@@ -71,9 +66,9 @@ istream& Parser::get_block(istream& is, string& str) const
     return is;
 }
 
-istream& Parser::get_unnested(istream& is, string& str) const
+std::istream& Parser::get_unnested(std::istream& is, std::string& str) const
 {
-  stringstream unnested;
+  std::stringstream unnested;
   int depth(0);
   for (char c; is.get(c);) {
 
@@ -110,24 +105,24 @@ istream& Parser::get_unnested(istream& is, string& str) const
   return is;
 }
 
-istream& Parser::get_bibEntry(istream& is, bibEntry& bEn) const
+std::istream& Parser::get_bibEntry(std::istream& is, bibEntry& bEn) const
 {
   // Discard everything bevore the first @
-  string tmp;
+  std::string tmp;
   std::getline(is, tmp, '@');
 
   // get type
   std::getline(is, bEn.type, '{');  
 
   // save block in stringstream
-  string bEn_s;
+  std::string bEn_s;
   get_block(is, bEn_s);
-  stringstream bEn_ss(bEn_s);
+  std::stringstream bEn_ss(bEn_s);
 
   // create bibEntry
   std::getline(bEn_ss, bEn.key, ',');
   while (true) {
-    string bEl_s;
+    std::string bEl_s;
     bool last(false);
     // get one line ending with ',' however last line may not end with ','
     if (!get_unnested(bEn_ss, bEl_s)) {
@@ -135,13 +130,13 @@ istream& Parser::get_bibEntry(istream& is, bibEntry& bEn) const
       else last = true;
     }
     // extract element
-    stringstream bEl_ss(bEl_s);
+    std::stringstream bEl_ss(bEl_s);
     bibElement bEl;
     // field is the part before '='
     std::getline(bEl_ss, bEl.field, '=');
     bEl.field = clean_string(bEl.field);
     // 'delim' is the first printable character that is not a space
-    string bEl_str = bEl_ss.str().substr(bEl_ss.tellg());
+    std::string bEl_str = bEl_ss.str().substr(bEl_ss.tellg());
     char delim = ' ';
     for (char& c : bEl_str) {
       if ((!isspace(c)) && (isprint(c))) {

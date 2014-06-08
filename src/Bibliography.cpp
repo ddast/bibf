@@ -20,11 +20,7 @@
 
 #include "Bibliography.hpp"
 
-using std::istream;
-using std::string;
-using std::stringstream;
-
-string Bibliography::clean_string(string str) const
+std::string Bibliography::clean_string(std::string str) const
 {
   // Replace all nonprintable characters with spaces
   auto del_from = std::remove_if(str.begin(), str.end(),
@@ -38,7 +34,7 @@ string Bibliography::clean_string(string str) const
 
   // Delete leading and ending spaces
   size_t first = str.find_first_not_of(" ");
-  if (first == string::npos)
+  if (first == std::string::npos)
     return "";
   size_t last = str.find_last_not_of(" ");
   str = str.substr(first, last-first+1);
@@ -47,17 +43,17 @@ string Bibliography::clean_string(string str) const
 }
 
 
-string Bibliography::clean_key(string key) const
+std::string Bibliography::clean_key(std::string key) const
 {
   // allowed characters in key
-  string allowed = "abcdefghijklmnopqrstuvwxyz"
+  std::string allowed = "abcdefghijklmnopqrstuvwxyz"
     "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     "1234567890:.-";
 
   // delete all not allowed keys
   while (true) {
     size_t pos = key.find_first_not_of(allowed);
-    if (pos == string::npos)
+    if (pos == std::string::npos)
       break;
     key.erase(pos, 1);
   }
@@ -66,20 +62,20 @@ string Bibliography::clean_key(string key) const
 }
 
 
-string Bibliography::get_lastname(string author) const
+std::string Bibliography::get_lastname(std::string author) const
 {
   // get the first author
   size_t found = author.find("and");
-  if (found != string::npos)
+  if (found != std::string::npos)
     author = author.substr(0, found);
   author = clean_string(author);
 
   // get last name
   found = author.find(",");
-  if (found != string::npos)
+  if (found != std::string::npos)
     author = author.substr(0, found);
   else {
-    stringstream author_ss(author);
+    std::stringstream author_ss(author);
     while (author_ss >> author);
   }
 
@@ -98,26 +94,27 @@ string Bibliography::get_lastname(string author) const
 }
 
 
-bool Bibliography::is_numerical(const string& s) const
+bool Bibliography::is_numerical(const std::string& s) const
 {
   size_t found = s.find_first_not_of("1234567890");
-  return (found==string::npos);
+  return (found==std::string::npos);
 }
 
 
 void Bibliography::print_bib(std::ostream &os) const
 {
-  std::vector<string> empty;
+  std::vector<std::string> empty;
   print_bib(empty, os);
 }
 
 
-void Bibliography::print_bib(std::vector<string> only, std::ostream &os) const
+void Bibliography::print_bib(std::vector<std::string> only,
+    std::ostream &os) const
 {
   bool print_all = only.empty();
   // convert list to lowercase
   if (!print_all)
-    for (string& s : only)
+    for (std::string& s : only)
       std::transform(s.begin(), s.end(), s.begin(), ::tolower);
   // iterate over all entries (use copies)
   for (bibEntry bEn : bib) {
@@ -128,7 +125,7 @@ void Bibliography::print_bib(std::vector<string> only, std::ostream &os) const
             [&] (bibElement bEl) -> bool {
               std::transform(bEl.field.begin(), bEl.field.end(),
                 bEl.field.begin(), ::tolower);
-              for (const string &po : only) {
+              for (const std::string &po : only) {
                 if (po == bEl.field) 
                   return false;
               }
@@ -155,20 +152,20 @@ void Bibliography::print_bib(std::vector<string> only, std::ostream &os) const
       if (is_numerical(bEl.value))
         print_delimiter = false;
       // Or if the month field uses three-letter abbreviations
-      string field = bEl.field;
+      std::string field = bEl.field;
       std::transform(field.begin(), field.end(), field.begin(), ::tolower);
       if ( (field == "month") &&
           Constants::is_valid_month_abbreviation(bEl.value) )
         print_delimiter = false;
       // construct line
-      string line;
+      std::string line;
       if (right_aligned) {
         for (unsigned int i = 0, end = longest_field-field.length();
             i < end; ++i)
           line.push_back(' ');
       }
       line += intend + bEl.field + " = ";
-      string intend_after_break;
+      std::string intend_after_break;
       for (unsigned int i = 0, length = line.length(); i < length; ++i)
         intend_after_break.push_back(' ');
       if (print_delimiter)
@@ -185,10 +182,11 @@ void Bibliography::print_bib(std::vector<string> only, std::ostream &os) const
 }
 
 
-string Bibliography::break_string(string str, const string &intend) const
+std::string Bibliography::break_string(std::string str,
+    const std::string &intend) const
 {
   // store each line in a vector
-  std::vector<string> lines;
+  std::vector<std::string> lines;
   // break until 'str' is small enough
   while (str.length() > linebreak) {
     // find the first space before linebreak
@@ -209,8 +207,8 @@ string Bibliography::break_string(string str, const string &intend) const
   }
 
   // create one string containing all lines
-  string result("");
-  for (const string &l: lines)
+  std::string result("");
+  for (const std::string &l: lines)
     result += l;
   // don't forget the rest in str
   result += str;
@@ -227,7 +225,7 @@ Bibliography::Bibliography() :
 { }
 
 
-void Bibliography::add(istream &is)
+void Bibliography::add(std::istream &is)
 {
   // create parsing object
   Parser parser;
@@ -259,13 +257,14 @@ bool Bibliography::check_consistency() const
 }
 
 
-string Bibliography::get_field_value(const bibEntry &bE, string field) const
+std::string Bibliography::get_field_value(const bibEntry &bE,
+    std::string field) const
 {
   // transform to lower case
   std::transform(field.begin(), field.end(), field.begin(), ::tolower);
   // search for entry
   for (const bibElement& bEl : bE.element) {
-    string current = bEl.field;
+    std::string current = bEl.field;
     std::transform(current.begin(), current.end(), current.begin(), ::tolower);
     if (current == field)
       return bEl.value;
@@ -277,8 +276,8 @@ string Bibliography::get_field_value(const bibEntry &bE, string field) const
 void Bibliography::create_keys()
 {
   for (auto it = bib.begin(), end = bib.end(); it != end; ++it) {
-    string author = get_lastname(get_field_value(*it, "author"));
-    string year = get_field_value(*it, "year");
+    std::string author = get_lastname(get_field_value(*it, "author"));
+    std::string year = get_field_value(*it, "year");
     if (year.length() >= 2)
       year = year.substr(year.length()-2, 2);
     it->key = author + year;
@@ -343,11 +342,11 @@ void Bibliography::change_case(const char case_t, const char case_f)
 }
 
 
-void Bibliography::erase_field(string field)
+void Bibliography::erase_field(std::string field)
 {
   std::transform(field.begin(), field.end(), field.begin(), ::tolower);
   auto compare = [&] (bibElement& el) -> bool {
-    string cur = el.field;
+    std::string cur = el.field;
     std::transform(cur.begin(), cur.end(), cur.begin(), ::tolower);
     if (cur == field) return true;
     else return false;
@@ -358,13 +357,13 @@ void Bibliography::erase_field(string field)
 }
 
 
-void Bibliography::sort_bib(std::vector<string> criteria)
+void Bibliography::sort_bib(std::vector<std::string> criteria)
 {
   // check if 'bE1' is smaller than 'bE2' using the given criteria
   auto cmp_after_criteria =
     [&] (const bibEntry& bE1, const bibEntry& bE2) -> bool
     {
-      for (string& cur_crit : criteria) {
+      for (std::string& cur_crit : criteria) {
         std::transform(cur_crit.begin(), cur_crit.end(), cur_crit.begin(),
             ::tolower);
         int comp = 0;
@@ -373,15 +372,15 @@ void Bibliography::sort_bib(std::vector<string> criteria)
         else if (cur_crit == "key")
           comp = bE1.key.compare(bE2.key);
         else if (cur_crit == "firstauthor") {
-          string str1 = get_field_value(bE1, "author");
+          std::string str1 = get_field_value(bE1, "author");
           str1 = get_lastname(str1);
-          string str2 = get_field_value(bE2, "author");
+          std::string str2 = get_field_value(bE2, "author");
           str2 = get_lastname(str2);
           comp = str1.compare(str2);
         }
         else {
-          string str1 = get_field_value(bE1, cur_crit);
-          string str2 = get_field_value(bE2, cur_crit);
+          std::string str1 = get_field_value(bE1, cur_crit);
+          std::string str2 = get_field_value(bE2, cur_crit);
           comp = str1.compare(str2);
         }
         if (comp < 0) return true;
@@ -414,7 +413,7 @@ void Bibliography::sort_elements()
 }
 
 
-void Bibliography::set_intendation(const string& str)
+void Bibliography::set_intendation(const std::string& str)
 {
   // check for consitency and set intendation
   intend = str;
@@ -457,11 +456,12 @@ void Bibliography::show_missing_fields(bool only_required) const
 {
   // check for missing required fields
   for (const bibEntry& bEn : bib) {
-    std::vector<string> required = Constants::get_required_values(bEn.type);
-    for (const string& current : required) {
+    std::vector<std::string> required =
+      Constants::get_required_values(bEn.type);
+    for (const std::string& current : required) {
       bool has_required_field = false;
       std::istringstream current_ss(current);
-      for (string _current; std::getline(current_ss, _current, ' '); )
+      for (std::string _current; std::getline(current_ss, _current, ' '); )
         if (!(get_field_value(bEn, _current).empty()))
           has_required_field = true;
       if (!has_required_field)
@@ -471,11 +471,12 @@ void Bibliography::show_missing_fields(bool only_required) const
     if (only_required)
       continue;
     // check for missing optional fields
-    std::vector<string> optional = Constants::get_optional_values(bEn.type);
-    for (const string& current : optional) {
+    std::vector<std::string> optional =
+      Constants::get_optional_values(bEn.type);
+    for (const std::string& current : optional) {
       bool has_optional_field = false;
       std::istringstream current_ss(current);
-      for (string _current; std::getline(current_ss, _current, ' '); )
+      for (std::string _current; std::getline(current_ss, _current, ' '); )
         if (!(get_field_value(bEn, _current).empty()))
           has_optional_field = true;
       if (!has_optional_field)
@@ -486,10 +487,10 @@ void Bibliography::show_missing_fields(bool only_required) const
 }
 
 
-void Bibliography::show_missing_fields(std::vector<string> fields) const
+void Bibliography::show_missing_fields(std::vector<std::string> fields) const
 {
   for (const bibEntry& bEn : bib) {
-    for (string& current : fields) {
+    for (std::string& current : fields) {
       if (get_field_value(bEn, current).empty())
         std::cout << bEn.key << Strings::tr(Strings::OUT_MISSING_FIELD)
           << current << "\"" << std::endl;
@@ -503,7 +504,7 @@ void Bibliography::abbreviate_month()
   // try to find the correct abbreviation
   for (bibEntry& bEn : bib) {
     for (bibElement& bEl : bEn.element) {
-      string field = bEl.field;
+      std::string field = bEl.field;
       std::transform(field.begin(), field.end(), field.begin(), ::tolower);
       if (field == "month")
         bEl.value = Constants::find_month_abbreviation(bEl.value);
