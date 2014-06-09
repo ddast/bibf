@@ -30,9 +30,9 @@ void Parser::add(std::istream &is, std::vector<bibEntry> &bib)
 
 std::string Parser::clean_string(std::string str) const
 {
-  // Replace all nonprintable characters with spaces
+  // Remove the characters \f, \n, \r, \t, \v
   auto del_from = std::remove_if(str.begin(), str.end(),
-      [] (char c) -> bool { return !isprint(c); });
+      [] (char c) -> bool { return (isspace(c) && c != ' '); });
   str.erase(del_from, str.end());
 
   // Remove double spaces
