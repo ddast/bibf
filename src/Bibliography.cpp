@@ -306,7 +306,7 @@ void Bibliography::change_case(const char case_t, const char case_f)
   for (bibEntry& bEn : bib) {
     std::transform(bEn.type.begin(), bEn.type.end(), bEn.type.begin(),
         touplo_t);
-    if (case_f == 'S')
+    if (case_t == 'S')
       bEn.type[0] = toupper(bEn.type[0]);
     for (bibElement& bEl : bEn.element) {
       std::transform(bEl.field.begin(), bEl.field.end(), bEl.field.begin(),
