@@ -199,7 +199,7 @@ int main(int argc, char* argv[])
     if (vm.count("sort-bib")) {
       std::vector<std::string> sort =
         separate_string( vm["sort-bib"].as<std::string>() );
-      bib.sort_bib(vm["sort-bib"].as< std::vector<std::string> >());
+      bib.sort_bib(sort);
     }
 
     // sort elements
