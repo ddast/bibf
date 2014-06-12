@@ -20,6 +20,9 @@
 
 #include "Strings.hpp"
 
+// program version
+const std::string Strings::version = "0.1";
+
 // Standard value of current_lang
 Strings::LANG Strings::current_lang = Strings::LANG_EN;
 
@@ -56,7 +59,7 @@ const std::array<std::string, Strings::STR_CNT> Strings::en {{
   "display this help and exit",
   "output version information and exit",
   "bibtex files for input",
-  "bibf 0.1 Copyright (C) 2014 Dennis Dast\n\n"
+  "bibf " + version + " Copyright (C) 2014 Dennis Dast\n\n"
     "This program comes with ABSOLUTELY NO WARRANTY.\n"
     "This is free software, and you are welcome to redistribute it"
     " under certain conditions.\n",
@@ -111,7 +114,7 @@ const std::array<std::string, Strings::STR_CNT> Strings::de {{
   "zeige diese Hilfe an",
   "zeige Versionsinformationen an",
   "bibtex Dateien zum Einlesen",
-  "bibf 0.1 Copyright (C) 2014 Dennis Dast\n\n"
+  "bibf " + version + " Copyright (C) 2014 Dennis Dast\n\n"
     "This program comes with ABSOLUTELY NO WARRANTY.\n"
     "This is free software, and you are welcome to redistribute it"
     " under certain conditions.\n",

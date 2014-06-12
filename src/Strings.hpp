@@ -82,6 +82,9 @@ class Strings
       LANG_CNT
     };
 
+    // program version
+    static const std::string version;
+
     // map to translage between a string the the enum
     static const std::unordered_map<std::string, LANG> lang_map;
 
