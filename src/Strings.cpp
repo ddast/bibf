@@ -44,8 +44,8 @@ const std::array<std::string, Strings::STR_CNT> Strings::en {{
     " different values must be separated by commas",
   "sort the elements of each entry alphabetically",
   "erase the field in every entry; use comma to apply more than one value",
-  "show missing required fields and also missing optional fields with"
-    " option O",
+  "show missing required fields (R) and also missing optional fields (O);"
+   " R is assumend if invoked without an argument",
   "show all entries that do not contain a specific field;"
     " use commas to search for more than one field",
   "change the case of all types and keys to lower (L), UPPER (U) or"
@@ -97,8 +97,9 @@ const std::array<std::string, Strings::STR_CNT> Strings::de {{
   "sortiere die Elemente jedes Eintrags alphabetisch",
   "lösche das Feld in jedem Eintrag; mit Komma getrennt können mehrere Werte"
     " angegeben werden",
-  "zeige die fehlenden Pflichtfelder an, fehlende optionale Felder mit der"
-    " Option O",
+  "zeige die fehlenden Pflichtfelder an (R) und zusätzlich fehlende optionale"
+   " Felder (O); falls die Option ohne Argument aufgerufen wird, wird R"
+   " verwendet", 
   "zeige alle Einträge, die ein bestimmtes Feld nicht enthalten;"
     "mit Kommas kann mehr als ein Feld angegeben werden",
   "ändere Groß-/Kleinschreibung der Typen und Schlüssel zu"

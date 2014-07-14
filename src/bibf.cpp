@@ -72,7 +72,7 @@ int main(int argc, char* argv[])
         Strings::tr(Strings::OPT_SHOW_MISSING).c_str())
       ("missing-fields,M", po::value<std::string>(),
         Strings::tr(Strings::OPT_MISSING_FIELDS).c_str())
-      ("change-case", po::value<std::string>()->implicit_value("L"),
+      ("change-case", po::value<std::string>()->default_value("L"),
         Strings::tr(Strings::OPT_CHANGE_CASE).c_str())
       ("linebreak", po::value<unsigned int>(),
         Strings::tr(Strings::OPT_LINEBREAK).c_str())
