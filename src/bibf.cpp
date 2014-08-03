@@ -72,7 +72,7 @@ int main(int argc, char* argv[])
         Strings::tr(Strings::OPT_SHOW_MISSING).c_str())
       ("missing-fields,M", po::value<std::string>(),
         Strings::tr(Strings::OPT_MISSING_FIELDS).c_str())
-      ("change-case", po::value<std::string>()->implicit_value("L"),
+      ("change-case", po::value<std::string>()->default_value("L"),
         Strings::tr(Strings::OPT_CHANGE_CASE).c_str())
       ("linebreak", po::value<unsigned int>(),
         Strings::tr(Strings::OPT_LINEBREAK).c_str())
@@ -191,10 +191,6 @@ int main(int argc, char* argv[])
         bib.erase_field(erase);
     }
 
-    // create keys
-    if (vm.count("create-keys"))
-      bib.create_keys();
-
     // sort bibliography
     if (vm.count("sort-bib")) {
       std::vector<std::string> sort =
@@ -206,6 +202,10 @@ int main(int argc, char* argv[])
     if (vm.count("sort-elements")) {
       bib.sort_elements();
     }
+
+    // create keys
+    if (vm.count("create-keys"))
+      bib.create_keys();
 
     // show missing fields
     if (vm.count("show-missing")) {
