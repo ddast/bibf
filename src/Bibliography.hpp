@@ -41,6 +41,9 @@ class Bibliography
     // Add the content of a stream to the bibliography
     void add(std::istream &is);
 
+    // Create new entry with the standard fields
+    void create_entry();
+
     // Changes all keys to the scheme:
     // last name of the first author + last two digits of the year + {a,b,c...}
     void create_keys();
@@ -128,6 +131,11 @@ class Bibliography
     // Insert line breaks into 'str' such that every line contains 'linebreak'
     // characters or less. Insert 'intend' before every new line.
     std::string break_string(std::string str, const std::string &intend) const;
+
+    // Asks user to enter all fields in vector 'fields' and add them to the
+    // bibEntry 'bEn'
+    void ask_for_fields(bibEntry &bEn, const std::vector<std::string> &fields)
+      const;
 
 };
 

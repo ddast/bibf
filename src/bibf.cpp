@@ -82,6 +82,7 @@ int main(int argc, char* argv[])
         Strings::tr(Strings::OPT_DELIMITER).c_str())
       ("align-left", Strings::tr(Strings::OPT_ALIGN_LEFT).c_str())
       ("abbrev-month", Strings::tr(Strings::OPT_ABBREV_MONTH).c_str())
+      ("new-entry,n", Strings::tr(Strings::OPT_NEW_ENTRY).c_str())
       ("help", Strings::tr(Strings::OPT_HELP).c_str())
       ("version", Strings::tr(Strings::OPT_VERSION).c_str())
     ;
@@ -130,6 +131,9 @@ int main(int argc, char* argv[])
         bib.add(bibFile);
         bibFile.close();
       }
+    }
+    else if (vm.count("new-entry")) {
+      bib.create_entry();
     }
     else {
       bib.add(std::cin);

@@ -213,6 +213,85 @@ void Bibliography::add(std::istream &is)
   check_consistency();
 }
 
+
+void Bibliography::create_entry()
+{
+  // create new bibEntry
+  bibEntry bEn;
+
+  // ask for type
+  std::cout << "Type: ";
+  std::string type;
+  std::cin >> type;
+  if (type.empty()) {
+    std::cerr << Strings::tr(Strings::ERR_CREATE_ENTRY_TYPE_NEEDED);
+    return;
+  }
+  bEn.type = type;
+
+  // get list of required and optional fields for the given type
+  std::vector<std::string> required = Constants::get_required_values(type);
+  std::vector<std::string> optional = Constants::get_optional_values(type);
+
+  // add required fields
+  if (!required.empty()) {
+    std::cout << Strings::tr(Strings::OUT_CREATE_ENTRY_REQ);
+    ask_for_fields(bEn, required);
+  }
+  else {
+    std::cout << Strings::tr(Strings::OUT_CREATE_ENTRY_UNKNOWN);
+  }
+
+  // ask if optional fields should be added
+  if (!optional.empty()) {
+    std::cout << Strings::tr(Strings::OUT_CREATE_ENTRY_OPT);
+    std::string input;
+    std::cin >> input;
+    if (input != "n") {
+      ask_for_fields(bEn, optional);
+    }
+  }
+
+  // ask for arbitrary entries until empty input
+  std::cout << Strings::tr(Strings::OUT_CREATE_ENTRY_ARB);
+  while (true) {
+    std::string field;
+    std::cin >> field;
+    if (field.empty())
+      break;
+    std::string value;
+    std::cin >> value;
+    if (value.empty())
+      break;
+    bibElement bEl;
+    bEl.field = field;
+    bEl.value = value;
+    bEn.element.push_back(bEl);
+  }
+
+  // add newly created entry to bibliography
+  bib.push_back(bEn);
+}
+
+void Bibliography::ask_for_fields(bibEntry &bEn,
+    const std::vector<std::string> &fields) const
+{
+  // ask user to enter all fields
+  for (const std::string &field : fields) {
+    std::cout << field << ": ";
+    std::string input;
+    std::cin >> input;
+    // skip if no input was given
+    if (input.empty())
+      continue;
+    // else add new bibElement
+    bibElement bEl;
+    bEl.field = field;
+    bEl.value = input;
+    bEn.element.push_back(bEl);
+  }
+}
+
 bool Bibliography::check_consistency() const
 {
   // return true if the bibliography is consistent else false

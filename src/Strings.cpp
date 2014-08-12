@@ -56,6 +56,7 @@ const std::array<std::string, Strings::STR_CNT> Strings::en {{
   "set field delimiter, valid values are { or \"",
   "use left instead of right alignment",
   "try to find the correct abbreviation of the month",
+  "interactively create a new bibtex entry",
   "display this help and exit",
   "output version information and exit",
   "bibtex files for input",
@@ -66,6 +67,10 @@ const std::array<std::string, Strings::STR_CNT> Strings::en {{
   " misses required field \"",
   " misses optional field \"",
   " misses field \"",
+  "Required fields:\n",
+  "Add optional fields? [Y,n]\n",
+  "Unknown type\n",
+  "Add user-defined fields (use empty input to exit)\n",
   "Malformed option '--change-case', valid options"
     " are one or two characters.\n",
   "Illegal field delimiter: ",
@@ -79,6 +84,7 @@ const std::array<std::string, Strings::STR_CNT> Strings::en {{
   "Bibliography::change_case : case_f must be 'U', 'L' or 'S' but is ",
   "Warning: set_field_delimiter called with illegal "
     "character as begin field delimiter: ",
+  "Giving a type is mandatory\n",
   "Warning: set_field_delimiter called with illegal "
     "character as end field delimiter: "
 }};
@@ -105,13 +111,14 @@ const std::array<std::string, Strings::STR_CNT> Strings::de {{
   "ändere Groß-/Kleinschreibung der Typen und Schlüssel zu"
     " kleinschreibung (L), GROSSSCHREIBUNG (U) oder Großen"
     " Anfangsbuchstaben (S) (Standard L); für verschiedene Optionen von"
-    " Typ und Schlüssel können zwei Buchstablen übergeben werden"
+    " Typ und Schlüssel können zwei Buchstaben übergeben werden"
     " (LU, UL, ...)",
   "breche nach dieser Zahl von Ziffern um (Standard 79)",
   "legt Einrückung fest (Standard zwei Leerzeichen)",
   "legt Feldtrenner fest, mögliche Werte sind { oder \"",
   "versucht die korrekte Abkürzung für den Monat zu finden",
   "verwende linke statt rechte Ausrichtung",
+  "erzeuge interaktiv einen neuen bibtex Eintrag",
   "zeige diese Hilfe an",
   "zeige Versionsinformationen an",
   "bibtex Dateien zum Einlesen",
@@ -122,6 +129,10 @@ const std::array<std::string, Strings::STR_CNT> Strings::de {{
   " fehlt das Pflichtfeld \"",
   " fehlt das optionale feld \"",
   " fehlt das Feld \"",
+  "Pflichtfelder:\n",
+  "Optionale Felder hinzufügen? [Y,n]\n",
+  "Unbekannter Typ\n",
+  "Füge benutzerdefinierte Felder hinzu (leere Eingabe bricht ab)\n",
   "Unbekannte Option für '--change-case', mögliche Werte sind ein oder zwei"
     " Zifferns.\n",
   "Nicht erlaubtes Zeichen für Feldtrennung: ",
@@ -135,6 +146,7 @@ const std::array<std::string, Strings::STR_CNT> Strings::de {{
   "Bibliography::change_case : case_f muss 'U', 'L' oder 'S' sein, aber ist ",
   "Warnung: set_field_delimiter mit unerlaubtem Zeichen als Feldbeginnzeichen"
     " aufgerufen: ",
+  "Es muss ein bibtex Typ angegeben werden\n",
   "Warnung: set_field_delimiter mit unerlaubtem Zeichen als Feldendzeichen"
     " aufgerufen: "
 }};
