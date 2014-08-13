@@ -38,6 +38,7 @@ A simple bibtex pretty printer.
       --align-left                     use left instead of right alignment
       --abbrev-month                   try to find the correct abbreviation of the 
                                        month
+      -n [ --new-entry ]               interactively create a new BibTeX entry
       --help                           display this help and exit
       --version                        output version information and exit
     
