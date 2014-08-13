@@ -219,10 +219,16 @@ void Bibliography::create_entry()
   // create new bibEntry
   bibEntry bEn;
 
+  // ask for key
+  std::cerr << Strings::tr(Strings::OUT_CREATE_ENTRY_KEY);
+  std::string key;
+  std::getline(std::cin, key);
+  bEn.key = key;
+
   // ask for type
-  std::cout << "Type: ";
+  std::cerr << Strings::tr(Strings::OUT_CREATE_ENTRY_TYPE);
   std::string type;
-  std::cin >> type;
+  std::getline(std::cin, type);
   if (type.empty()) {
     std::cerr << Strings::tr(Strings::ERR_CREATE_ENTRY_TYPE_NEEDED);
     return;
@@ -235,32 +241,33 @@ void Bibliography::create_entry()
 
   // add required fields
   if (!required.empty()) {
-    std::cout << Strings::tr(Strings::OUT_CREATE_ENTRY_REQ);
+    std::cerr << Strings::tr(Strings::OUT_CREATE_ENTRY_REQ);
     ask_for_fields(bEn, required);
   }
   else {
-    std::cout << Strings::tr(Strings::OUT_CREATE_ENTRY_UNKNOWN);
+    std::cerr << Strings::tr(Strings::OUT_CREATE_ENTRY_UNKNOWN);
   }
 
   // ask if optional fields should be added
   if (!optional.empty()) {
-    std::cout << Strings::tr(Strings::OUT_CREATE_ENTRY_OPT);
+    std::cerr << Strings::tr(Strings::OUT_CREATE_ENTRY_OPT);
     std::string input;
-    std::cin >> input;
+    std::getline(std::cin, input);
     if (input != "n") {
       ask_for_fields(bEn, optional);
     }
   }
 
   // ask for arbitrary entries until empty input
-  std::cout << Strings::tr(Strings::OUT_CREATE_ENTRY_ARB);
+  std::cerr << Strings::tr(Strings::OUT_CREATE_ENTRY_ARB);
   while (true) {
     std::string field;
-    std::cin >> field;
+    std::getline(std::cin, field);
     if (field.empty())
       break;
+    std::cerr << field << ": ";
     std::string value;
-    std::cin >> value;
+    std::getline(std::cin, value);
     if (value.empty())
       break;
     bibElement bEl;
@@ -276,11 +283,25 @@ void Bibliography::create_entry()
 void Bibliography::ask_for_fields(bibEntry &bEn,
     const std::vector<std::string> &fields) const
 {
-  // ask user to enter all fields
+  // iterate over all entries
   for (const std::string &field : fields) {
-    std::cout << field << ": ";
+    // check for alternative values
+    auto found = field.find(" ");
+    if (found != std::string::npos) {
+      std::stringstream alt_ss(field);
+      std::string alt1, alt2;
+      alt_ss >> alt1 >> alt2;
+      std::cerr << alt1 << Strings::tr(Strings::OUT_CREATE_ENTRY_ALT1)
+          << alt2 << Strings::tr(Strings::OUT_CREATE_ENTRY_ALT2);
+      std::vector<std::string> alt_fields = {alt1, alt2};
+      ask_for_fields(bEn, alt_fields);
+      continue;
+    }
+
+    // ask user if no alternative value is possible
+    std::cerr << field << ": ";
     std::string input;
-    std::cin >> input;
+    std::getline(std::cin, input);
     // skip if no input was given
     if (input.empty())
       continue;
@@ -520,7 +541,7 @@ void Bibliography::show_missing_fields(bool only_required) const
         if (!(get_field_value(bEn, _current).empty()))
           has_required_field = true;
       if (!has_required_field)
-        std::cout << bEn.key << Strings::tr(Strings::OUT_MISSES_REQUIRED)
+        std::cerr << bEn.key << Strings::tr(Strings::OUT_MISSES_REQUIRED)
           << current << "\"" << std::endl;
     }
     if (only_required)
@@ -535,7 +556,7 @@ void Bibliography::show_missing_fields(bool only_required) const
         if (!(get_field_value(bEn, _current).empty()))
           has_optional_field = true;
       if (!has_optional_field)
-        std::cout << bEn.key << Strings::tr(Strings::OUT_MISSES_OPTIONAL)
+        std::cerr << bEn.key << Strings::tr(Strings::OUT_MISSES_OPTIONAL)
           << current << "\"" << std::endl;
     }
   }
@@ -547,7 +568,7 @@ void Bibliography::show_missing_fields(std::vector<std::string> fields) const
   for (const bibEntry& bEn : bib) {
     for (std::string& current : fields) {
       if (get_field_value(bEn, current).empty())
-        std::cout << bEn.key << Strings::tr(Strings::OUT_MISSING_FIELD)
+        std::cerr << bEn.key << Strings::tr(Strings::OUT_MISSING_FIELD)
           << current << "\"" << std::endl;
     }
   }

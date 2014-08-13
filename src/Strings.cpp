@@ -56,10 +56,10 @@ const std::array<std::string, Strings::STR_CNT> Strings::en {{
   "set field delimiter, valid values are { or \"",
   "use left instead of right alignment",
   "try to find the correct abbreviation of the month",
-  "interactively create a new bibtex entry",
+  "interactively create a new BibTeX entry",
   "display this help and exit",
   "output version information and exit",
-  "bibtex files for input",
+  "BibTeX files for input",
   "bibf " + version + " Copyright (C) 2014 Dennis Dast\n\n"
     "This program comes with ABSOLUTELY NO WARRANTY.\n"
     "This is free software, and you are welcome to redistribute it"
@@ -67,10 +67,14 @@ const std::array<std::string, Strings::STR_CNT> Strings::en {{
   " misses required field \"",
   " misses optional field \"",
   " misses field \"",
-  "Required fields:\n",
-  "Add optional fields? [Y,n]\n",
+  "BibTex key: ",
+  "BibTeX type: ",
+  "\nRequired fields:\n",
+  "\nAdd optional fields? [Y,n] ",
   "Unknown type\n",
-  "Add user-defined fields (use empty input to exit)\n",
+  "\nAdd user-defined fields (use empty input to exit):\n",
+  " and ",
+  " are alternatives\n",
   "Malformed option '--change-case', valid options"
     " are one or two characters.\n",
   "Illegal field delimiter: ",
@@ -84,9 +88,9 @@ const std::array<std::string, Strings::STR_CNT> Strings::en {{
   "Bibliography::change_case : case_f must be 'U', 'L' or 'S' but is ",
   "Warning: set_field_delimiter called with illegal "
     "character as begin field delimiter: ",
-  "Giving a type is mandatory\n",
   "Warning: set_field_delimiter called with illegal "
-    "character as end field delimiter: "
+    "character as end field delimiter: ",
+  "Giving a type is mandatory\n"
 }};
 
 // German
@@ -118,10 +122,10 @@ const std::array<std::string, Strings::STR_CNT> Strings::de {{
   "legt Feldtrenner fest, mögliche Werte sind { oder \"",
   "versucht die korrekte Abkürzung für den Monat zu finden",
   "verwende linke statt rechte Ausrichtung",
-  "erzeuge interaktiv einen neuen bibtex Eintrag",
+  "erzeuge interaktiv einen neuen BibTeX Eintrag",
   "zeige diese Hilfe an",
   "zeige Versionsinformationen an",
-  "bibtex Dateien zum Einlesen",
+  "BibTeX Dateien zum Einlesen",
   "bibf " + version + " Copyright (C) 2014 Dennis Dast\n\n"
     "This program comes with ABSOLUTELY NO WARRANTY.\n"
     "This is free software, and you are welcome to redistribute it"
@@ -129,10 +133,14 @@ const std::array<std::string, Strings::STR_CNT> Strings::de {{
   " fehlt das Pflichtfeld \"",
   " fehlt das optionale feld \"",
   " fehlt das Feld \"",
-  "Pflichtfelder:\n",
-  "Optionale Felder hinzufügen? [Y,n]\n",
+  "BibTex Schlüssel: ",
+  "BibTeX Typ: ",
+  "\nPflichtfelder:\n",
+  "\nOptionale Felder hinzufügen? [Y,n] ",
   "Unbekannter Typ\n",
-  "Füge benutzerdefinierte Felder hinzu (leere Eingabe bricht ab)\n",
+  "\nFüge benutzerdefinierte Felder hinzu (leere Eingabe bricht ab):\n",
+  " und ",
+  " sind Alternativen\n",
   "Unbekannte Option für '--change-case', mögliche Werte sind ein oder zwei"
     " Zifferns.\n",
   "Nicht erlaubtes Zeichen für Feldtrennung: ",
@@ -146,9 +154,9 @@ const std::array<std::string, Strings::STR_CNT> Strings::de {{
   "Bibliography::change_case : case_f muss 'U', 'L' oder 'S' sein, aber ist ",
   "Warnung: set_field_delimiter mit unerlaubtem Zeichen als Feldbeginnzeichen"
     " aufgerufen: ",
-  "Es muss ein bibtex Typ angegeben werden\n",
   "Warnung: set_field_delimiter mit unerlaubtem Zeichen als Feldendzeichen"
-    " aufgerufen: "
+    " aufgerufen: ",
+  "Es muss ein BibTeX Typ angegeben werden\n"
 }};
 
 const std::array<std::array<std::string, Strings::STR_CNT>, Strings::LANG_CNT>
