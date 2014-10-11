@@ -318,6 +318,12 @@ bool Bibliography::check_consistency() const
   // return true if the bibliography is consistent else false
   bool is_consistent = true;
 
+  // check if bibliography is empty
+  if (bib.empty()) {
+    std::cerr << Strings::tr(Strings::ERR_EMPTY_BIB);
+    return false;
+  }
+
   // check if every key is unique
   for (auto it1 = bib.begin(), end = bib.end(); it1 != end-1; ++it1) {
     for (auto it2 = it1+1; it2 != end; ++it2) {

@@ -90,7 +90,8 @@ const std::array<std::string, Strings::STR_CNT> Strings::en {{
     "character as begin field delimiter: ",
   "Warning: set_field_delimiter called with illegal "
     "character as end field delimiter: ",
-  "Giving a type is mandatory\n"
+  "Giving a type is mandatory\n",
+  "Bibliography is empty\n"
 }};
 
 // German
@@ -156,7 +157,8 @@ const std::array<std::string, Strings::STR_CNT> Strings::de {{
     " aufgerufen: ",
   "Warnung: set_field_delimiter mit unerlaubtem Zeichen als Feldendzeichen"
     " aufgerufen: ",
-  "Es muss ein BibTeX Typ angegeben werden\n"
+  "Es muss ein BibTeX Typ angegeben werden\n",
+  "Bibliothek ist leer\n"
 }};
 
 const std::array<std::array<std::string, Strings::STR_CNT>, Strings::LANG_CNT>
