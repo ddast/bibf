@@ -19,6 +19,9 @@
  */
 
 #include "Bibliography.hpp"
+#include <boost/algorithm/string/predicate.hpp>
+
+namespace bstring = boost::algorithm;
 
 std::string Bibliography::clean_key(std::string key) const
 {
@@ -60,10 +63,6 @@ std::string Bibliography::get_lastname(std::string author) const
     std::cerr << Strings::tr(Strings::ERR_EMPTY_AUTHOR) << std::endl;
     return "";
   }
-
-  // first character upper case, rest lower case
-  std::transform(author.begin()+1, author.end(), author.begin()+1, ::tolower);
-  std::toupper(author.at(0));
 
   // return last name of first author
   return author;
@@ -357,12 +356,20 @@ std::string Bibliography::get_field_value(const bibEntry &bE,
 
 void Bibliography::create_keys()
 {
+  // iterate over all entries in the bibliography
   for (auto it = bib.begin(), end = bib.end(); it != end; ++it) {
+    // get lastname
     std::string author = get_lastname(get_field_value(*it, "author"));
+
+    // get the last two digits of the year
     std::string year = get_field_value(*it, "year");
     if (year.length() >= 2)
       year = year.substr(year.length()-2, 2);
+
+    // key is author plus year
     it->key = author + year;
+
+    // add identifier (a,b,c...) to the key
     char id = 'a';
     for (auto it2 = bib.begin(); it2 != it; ++it2)
       if (it->key == it2->key.substr(0,it2->key.length()-1))
@@ -374,6 +381,8 @@ void Bibliography::create_keys()
       break;
     }
     it->key += id;
+
+    // clean all not allowed characters
     it->key = clean_key(it->key);
   }
 }
@@ -448,32 +457,36 @@ void Bibliography::sort_bib(std::vector<std::string> criteria)
       for (std::string& cur_crit : criteria) {
         std::transform(cur_crit.begin(), cur_crit.end(), cur_crit.begin(),
             ::tolower);
-        int comp = 0;
-        if (cur_crit == "type")
-          comp = bE1.type.compare(bE2.type);
-        else if (cur_crit == "key")
-          comp = bE1.key.compare(bE2.key);
+        std::string str1("");
+        std::string str2("");
+        if (cur_crit == "type") {
+          str1 = bE1.type;
+          str2 = bE2.type;
+        }
+        else if (cur_crit == "key") {
+          str1 = bE1.key;
+          str2 = bE2.key;
+        }
         else if (cur_crit == "firstauthor") {
-          std::string str1 = get_field_value(bE1, "author");
+          str1 = get_field_value(bE1, "author");
           str1 = get_lastname(str1);
-          std::string str2 = get_field_value(bE2, "author");
+          str2 = get_field_value(bE2, "author");
           str2 = get_lastname(str2);
-          comp = str1.compare(str2);
         }
         else {
-          std::string str1 = get_field_value(bE1, cur_crit);
-          std::string str2 = get_field_value(bE2, cur_crit);
-          comp = str1.compare(str2);
+          str1 = get_field_value(bE1, cur_crit);
+          str2 = get_field_value(bE2, cur_crit);
         }
-        if (comp < 0) return true;
-        if (comp > 0) return false;
+        if (bstring::iequals(str1, str2)) {
+          continue;
+        }
+        return bstring::ilexicographical_compare(str1, str2);
       }
       return false;
     };
   
-  // sort bibliography
-  std::sort(bib.begin(), bib.end(), cmp_after_criteria);
-  //bib.sort(cmp_after_criteria);
+  // sort bibliography stable
+  std::stable_sort(bib.begin(), bib.end(), cmp_after_criteria);
 }
 
 
