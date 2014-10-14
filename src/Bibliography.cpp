@@ -312,7 +312,8 @@ void Bibliography::ask_for_fields(bibEntry &bEn,
   }
 }
 
-bool Bibliography::check_consistency() const
+
+bool Bibliography::check_consistency()
 {
   // return true if the bibliography is consistent else false
   bool is_consistent = true;
@@ -333,6 +334,38 @@ bool Bibliography::check_consistency() const
       }
     }
   }
+
+  // remove redundant entries
+  bib.erase( std::remove_if(bib.begin(), bib.end(),
+      // check if bEn is a subset of a different entry
+      [&](const bibEntry &bEn) -> bool {
+        // compare to all other entries in the bib
+        for (const bibEntry &cmp : bib) {
+          // do not compare to itself
+          if (&bEn == &cmp) {
+            continue;
+          }
+          // do not compare to smaller entries (greater is allowed)
+          if (cmp.element.size() < bEn.element.size()) {
+            continue;
+          }
+          // compare elements, continue if mismatch
+          for (const bibElement &bEl : bEn.element) {
+            if (bEl.value != get_field_value(cmp, bEl.field)) {
+              continue;
+            }
+          }
+          // compare types
+          if (bEn.type != cmp.type) {
+            continue;
+          }
+          // if we are still here, bEn is a subset of an other entry
+          return true;
+        }
+        // no match was found
+        return false;
+      }
+      ), bib.end() );
 
   return is_consistent;
 }

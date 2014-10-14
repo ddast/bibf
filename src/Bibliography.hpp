@@ -126,7 +126,7 @@ class Bibliography
     bool is_numerical(const std::string &s) const;
 
     // Do some basic consistency checking
-    bool check_consistency() const;
+    bool check_consistency();
 
     // Insert line breaks into 'str' such that every line contains 'linebreak'
     // characters or less. Insert 'intend' before every new line.
