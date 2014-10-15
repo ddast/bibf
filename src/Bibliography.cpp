@@ -324,6 +324,9 @@ bool Bibliography::check_consistency()
     return false;
   }
 
+  //delete redundant entries
+  delete_redundant_entries();
+
   // check if every key is unique
   for (auto it1 = bib.begin(), end = bib.end(); it1 != end-1; ++it1) {
     for (auto it2 = it1+1; it2 != end; ++it2) {
@@ -334,43 +337,6 @@ bool Bibliography::check_consistency()
       }
     }
   }
-
-  // remove redundant entries
-  bib.erase( std::remove_if(bib.begin(), bib.end(),
-      // check if bEn is a subset of a different entry
-      [&](const bibEntry &bEn) -> bool {
-        // compare to all other entries in the bib
-        for (const bibEntry &cmp : bib) {
-          // do not compare to itself
-          if (&bEn == &cmp) {
-            continue;
-          }
-          // do not compare to smaller entries (greater is allowed)
-          if (cmp.element.size() < bEn.element.size()) {
-            continue;
-          }
-          // compare elements, continue if mismatch
-          bool field_mismatch = false;
-          for (const bibElement &bEl : bEn.element) {
-            if (bEl.value != get_field_value(cmp, bEl.field)) {
-              field_mismatch = true;
-              break;
-            }
-          }
-          if (field_mismatch) {
-            continue;
-          }
-          // compare types
-          if (bEn.type != cmp.type) {
-            continue;
-          }
-          // if we are still here, bEn is a subset of an other entry
-          return true;
-        }
-        // no match was found
-        return false;
-      }
-      ), bib.end() );
 
   return is_consistent;
 }
@@ -645,3 +611,51 @@ void Bibliography::abbreviate_month()
   }
 }
 
+
+void Bibliography::delete_redundant_entries()
+{
+  // remove redundant entries
+  for (bibEntry &bEn: bib) {
+    // compare to all other entries in the bib
+    for (const bibEntry &cmp : bib) {
+      // do not compare to itself
+      if (&bEn == &cmp) {
+        continue;
+      }
+      // do not compare to smaller entries (greater is allowed)
+      if (cmp.element.size() < bEn.element.size()) {
+        continue;
+      }
+      // compare elements, continue if mismatch
+      bool field_mismatch = false;
+      for (const bibElement &bEl : bEn.element) {
+        if (bEl.value != get_field_value(cmp, bEl.field)) {
+          field_mismatch = true;
+          break;
+        }
+      }
+      if (field_mismatch) {
+        continue;
+      }
+      // compare types
+      if (bEn.type != cmp.type) {
+        continue;
+      }
+      // if we are still here, bEn is a subset of an other entry
+      // clear element vector of redundant entries
+      bEn.element.clear();
+      std::cerr << Strings::tr(Strings::ERR_REDUNDANT_ENTRY_1) << bEn.key
+        << Strings::tr(Strings::ERR_REDUNDANT_ENTRY_2);
+      break;
+    }
+    // no match was found
+  }
+
+  //delete entries with empty element vector
+  bib.erase( std::remove_if(bib.begin(), bib.end(),
+      // check if bEn is empty
+      [](const bibEntry &bEn) -> bool {
+        return bEn.element.empty();
+      }
+      ), bib.end() );
+}

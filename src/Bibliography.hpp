@@ -137,6 +137,9 @@ class Bibliography
     void ask_for_fields(bibEntry &bEn, const std::vector<std::string> &fields)
       const;
 
+    // Delete redundant entries
+    void delete_redundant_entries();
+
 };
 
 #endif
