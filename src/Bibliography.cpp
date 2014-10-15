@@ -350,10 +350,15 @@ bool Bibliography::check_consistency()
             continue;
           }
           // compare elements, continue if mismatch
+          bool field_mismatch = false;
           for (const bibElement &bEl : bEn.element) {
             if (bEl.value != get_field_value(cmp, bEl.field)) {
-              continue;
+              field_mismatch = true;
+              break;
             }
+          }
+          if (field_mismatch) {
+            continue;
           }
           // compare types
           if (bEn.type != cmp.type) {
