@@ -1,3 +1,5 @@
+#------------------------------------------------------------------------------
+
 prefix=/usr
 bindir=${prefix}/bin
 binname=bibf
@@ -6,6 +8,8 @@ CXX=g++
 CXXFLAGS=-O2 -Wall -Wextra -pedantic-errors -std=c++0x
 LDFLAGS=
 LDLIBS=-lboost_program_options
+
+#------------------------------------------------------------------------------
 
 OBJS=bibf.o Bibliography.o Constants.o Strings.o Parser.o
 

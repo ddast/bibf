@@ -21,7 +21,7 @@
 #include "Strings.hpp"
 
 // program version
-const std::string Strings::version = "0.1.3";
+const std::string Strings::version = "0.1.4";
 
 // Standard value of current_lang
 Strings::LANG Strings::current_lang = Strings::LANG_EN;
