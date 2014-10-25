@@ -1,22 +1,2 @@
-Wichtig:
-      neuen Eintrag generieren
-      Sonderzeichen ersetzen (clean_strings)
-      Fehlerbehandlung überarbeiten
-
-Unwichtig:
-      suchen und ersetzen in bestimmtem Feld
-      'and' muss vielleicht nicht klein geschrieben werden
-      create_keys kann "nur" 26 Veröffentlichungen eines Autors pro Jahr
-
-Cool aber aufwändig:
-      anpassbare Keys generieren
-
-
-Beispielcode zum Umlaute ersetzen:
-  std::string umlaut = "ä";
-  auto found = str.find(umlaut);
-  if (found != std::string::npos) {
-    auto len = umlaut.length();
-    str.replace(found, len, "{\\\"{a}}");
-  }
-
+- revise error handling
+- create user defined keys

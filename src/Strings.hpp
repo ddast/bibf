@@ -21,10 +21,9 @@
 #ifndef STRINGS_H
 #define STRINGS_H
 
-
 #include <array>
-#include <unordered_map>
 #include <string>
+#include <unordered_map>
 
 class Strings
 {

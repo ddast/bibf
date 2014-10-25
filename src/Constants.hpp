@@ -22,11 +22,9 @@
 #define CONSTANTS_H
 
 #include <array>
-#include <vector>
 #include <map>
 #include <string>
-#include <iostream>
-#include <algorithm>
+#include <vector>
 
 class Constants
 {

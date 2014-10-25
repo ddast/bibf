@@ -21,15 +21,12 @@
 #ifndef PARSER_H
 #define PARSER_H
 
+#include <istream>
 #include <string>
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <algorithm>
-#include "DataStructure.hpp"
-#include "Bibliography.hpp"
-#include "Constants.hpp"
-#include "Strings.hpp"
+#include <vector>
+
+// Forward declaration of user-defined types
+class bibEntry;
 
 class Parser
 {

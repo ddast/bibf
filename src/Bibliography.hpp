@@ -21,16 +21,10 @@
 #ifndef BIBLIOGRAPHY_H
 #define BIBLIOGRAPHY_H
 
-#include <vector>
-#include <string>
 #include <iostream>
-#include <fstream>
-#include <sstream>
-#include <algorithm>
+#include <string>
+#include <vector>
 #include "DataStructure.hpp"
-#include "Parser.hpp"
-#include "Constants.hpp"
-#include "Strings.hpp"
 
 class Bibliography
 {

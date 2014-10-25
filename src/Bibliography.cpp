@@ -18,8 +18,13 @@
  *  along with bibf.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Bibliography.hpp"
+#include <algorithm>
+#include <sstream>
 #include <boost/algorithm/string/predicate.hpp>
+#include "Constants.hpp"
+#include "Parser.hpp"
+#include "Strings.hpp"
+#include "Bibliography.hpp"
 
 namespace bstring = boost::algorithm;
 

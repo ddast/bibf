@@ -18,6 +18,9 @@
  *  along with bibf.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <algorithm>
+#include <sstream>
+#include "DataStructure.hpp"
 #include "Parser.hpp"
 
 void Parser::add(std::istream &is, std::vector<bibEntry> &bib)
