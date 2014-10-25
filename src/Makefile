@@ -3,6 +3,7 @@
 prefix=/usr
 bindir=${prefix}/bin
 binname=bibf
+DESTDIR=
 
 CXX=g++
 CXXFLAGS=-O2 -Wall -Wextra -pedantic-errors -std=c++0x
@@ -42,8 +43,8 @@ distclean:	clean
 	rm -f $(binname)
 
 install:	$(binname)
-	install -d $(bindir)
-	install $(binname) $(bindir)/$(binname)
+	install -d $(DESTDIR)$(bindir)
+	install $(binname) $(DESTDIR)$(bindir)/$(binname)
 
 uninstall:	
-	rm $(bindir)/$(binname)
+	rm $(DESTDIR)$(bindir)/$(binname)
