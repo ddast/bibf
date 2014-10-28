@@ -248,9 +248,6 @@ void Bibliography::create_entry()
     std::cerr << Strings::tr(Strings::OUT_CREATE_ENTRY_REQ);
     ask_for_fields(bEn, required);
   }
-  else if (optional.empty()) {
-    std::cerr << Strings::tr(Strings::OUT_CREATE_ENTRY_UNKNOWN);
-  }
 
   // ask if optional fields should be added
   if (!optional.empty()) {
@@ -260,6 +257,9 @@ void Bibliography::create_entry()
     if (input != "n") {
       ask_for_fields(bEn, optional);
     }
+  }
+  else if (required.empty()) {
+    std::cerr << Strings::tr(Strings::OUT_CREATE_ENTRY_UNKNOWN);
   }
 
   // ask for arbitrary entries until empty input
