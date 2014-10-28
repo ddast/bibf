@@ -22,6 +22,7 @@
 #include <sstream>
 #include <boost/algorithm/string/predicate.hpp>
 #include "Constants.hpp"
+#include "DataStructure.hpp"
 #include "Parser.hpp"
 #include "Strings.hpp"
 #include "Bibliography.hpp"
@@ -97,7 +98,7 @@ void Bibliography::print_bib(std::vector<std::string> only,
     for (std::string& s : only)
       std::transform(s.begin(), s.end(), s.begin(), ::tolower);
   // iterate over all entries (use copies)
-  for (bibEntry bEn : bib) {
+  for (bibEntry bEn : *bib) {
     // delete all entries which are not printed
     if (!print_all) {
       bEn.element.erase(
@@ -202,7 +203,14 @@ Bibliography::Bibliography() :
   field_beg('{'),
   field_end('}'),
   right_aligned(true)
-{ }
+{
+  bib = new std::vector<bibEntry>;
+}
+
+Bibliography::~Bibliography()
+{
+  delete bib;
+}
 
 
 void Bibliography::add(std::istream &is)
@@ -211,7 +219,7 @@ void Bibliography::add(std::istream &is)
   Parser parser;
 
   // add the stream to the bibliography
-  parser.add(is, bib);
+  parser.add(is, *bib);
 
   // do a consistency check
   check_consistency();
@@ -281,7 +289,7 @@ void Bibliography::create_entry()
   }
 
   // add newly created entry to bibliography
-  bib.push_back(bEn);
+  bib->push_back(bEn);
 }
 
 void Bibliography::ask_for_fields(bibEntry &bEn,
@@ -324,7 +332,7 @@ bool Bibliography::check_consistency()
   bool is_consistent = true;
 
   // check if bibliography is empty
-  if (bib.empty()) {
+  if (bib->empty()) {
     std::cerr << Strings::tr(Strings::ERR_EMPTY_BIB);
     return false;
   }
@@ -333,7 +341,7 @@ bool Bibliography::check_consistency()
   delete_redundant_entries();
 
   // check if every key is unique
-  for (auto it1 = bib.begin(), end = bib.end(); it1 != end-1; ++it1) {
+  for (auto it1 = bib->begin(), end = bib->end(); it1 != end-1; ++it1) {
     for (auto it2 = it1+1; it2 != end; ++it2) {
       if (it1->key == it2->key) {
         std::cerr << Strings::tr(Strings::ERR_DOUBLE_KEY_1) << it1->key
@@ -366,7 +374,7 @@ std::string Bibliography::get_field_value(const bibEntry &bE,
 void Bibliography::create_keys()
 {
   // iterate over all entries in the bibliography
-  for (auto it = bib.begin(), end = bib.end(); it != end; ++it) {
+  for (auto it = bib->begin(), end = bib->end(); it != end; ++it) {
     // get lastname
     std::string author = get_lastname(get_field_value(*it, "author"));
 
@@ -380,7 +388,7 @@ void Bibliography::create_keys()
 
     // add identifier (a,b,c...) to the key
     char id = 'a';
-    for (auto it2 = bib.begin(); it2 != it; ++it2)
+    for (auto it2 = bib->begin(); it2 != it; ++it2)
       if (it->key == it2->key.substr(0,it2->key.length()-1))
         ++id;
     if (id > 'z') {
@@ -427,7 +435,7 @@ void Bibliography::change_case(const char case_t, const char case_f)
     return;
   }
 
-  for (bibEntry& bEn : bib) {
+  for (bibEntry& bEn : *bib) {
     std::transform(bEn.type.begin(), bEn.type.end(), bEn.type.begin(),
         touplo_t);
     if (case_t == 'S')
@@ -451,7 +459,7 @@ void Bibliography::erase_field(std::string field)
     if (cur == field) return true;
     else return false;
   };
-  for (bibEntry& bEn : bib)
+  for (bibEntry& bEn : *bib)
     bEn.element.erase( std::remove_if(bEn.element.begin(), bEn.element.end(),
         compare), bEn.element.end() );
 }
@@ -495,7 +503,7 @@ void Bibliography::sort_bib(std::vector<std::string> criteria)
     };
   
   // sort bibliography stable
-  std::stable_sort(bib.begin(), bib.end(), cmp_after_criteria);
+  std::stable_sort(bib->begin(), bib->end(), cmp_after_criteria);
 }
 
 
@@ -511,7 +519,7 @@ void Bibliography::sort_elements()
     };
 
   // sort elements in each entry
-  for (bibEntry& bEn : bib) {
+  for (bibEntry& bEn : *bib) {
     std::sort(bEn.element.begin(), bEn.element.end(), compare_field);
   }
 }
@@ -559,7 +567,7 @@ void Bibliography::set_field_delimiter(char beg, char end)
 void Bibliography::show_missing_fields(bool only_required) const
 {
   // check for missing required fields
-  for (const bibEntry& bEn : bib) {
+  for (const bibEntry& bEn : *bib) {
     std::vector<std::string> required =
       Constants::get_required_values(bEn.type);
     for (const std::string& current : required) {
@@ -593,7 +601,7 @@ void Bibliography::show_missing_fields(bool only_required) const
 
 void Bibliography::show_missing_fields(std::vector<std::string> fields) const
 {
-  for (const bibEntry& bEn : bib) {
+  for (const bibEntry& bEn : *bib) {
     for (std::string& current : fields) {
       if (get_field_value(bEn, current).empty())
         std::cerr << bEn.key << Strings::tr(Strings::OUT_MISSING_FIELD)
@@ -606,7 +614,7 @@ void Bibliography::show_missing_fields(std::vector<std::string> fields) const
 void Bibliography::abbreviate_month()
 {
   // try to find the correct abbreviation
-  for (bibEntry& bEn : bib) {
+  for (bibEntry& bEn : *bib) {
     for (bibElement& bEl : bEn.element) {
       std::string field = bEl.field;
       std::transform(field.begin(), field.end(), field.begin(), ::tolower);
@@ -620,9 +628,9 @@ void Bibliography::abbreviate_month()
 void Bibliography::delete_redundant_entries()
 {
   // remove redundant entries
-  for (bibEntry &bEn: bib) {
+  for (bibEntry &bEn: *bib) {
     // compare to all other entries in the bib
-    for (const bibEntry &cmp : bib) {
+    for (const bibEntry &cmp : *bib) {
       // do not compare to itself
       if (&bEn == &cmp) {
         continue;
@@ -657,10 +665,10 @@ void Bibliography::delete_redundant_entries()
   }
 
   //delete entries with empty element vector
-  bib.erase( std::remove_if(bib.begin(), bib.end(),
+  bib->erase( std::remove_if(bib->begin(), bib->end(),
       // check if bEn is empty
       [](const bibEntry &bEn) -> bool {
         return bEn.element.empty();
       }
-      ), bib.end() );
+      ), bib->end() );
 }

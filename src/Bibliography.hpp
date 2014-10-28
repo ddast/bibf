@@ -24,13 +24,18 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "DataStructure.hpp"
+
+// Forward declaration of user-defined types
+class bibEntry;
 
 class Bibliography
 {
   public:
-    // Constructur only defines some standard values
+    // Constructur
     Bibliography();
+
+    // Destructor
+    ~Bibliography();
 
     // Add the content of a stream to the bibliography
     void add(std::istream &is);
@@ -90,7 +95,7 @@ class Bibliography
 
   private:
     // Internal representation of the bibliography
-    std::vector<bibEntry> bib;
+    std::vector<bibEntry> *bib;
 
     // Use intendation, standard value "  "
     std::string intend;

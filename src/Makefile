@@ -12,7 +12,7 @@ LDLIBS=-lboost_program_options
 
 #------------------------------------------------------------------------------
 
-OBJS=bibf.o Bibliography.o Constants.o Strings.o Parser.o
+OBJS=bibf.o Bibliography.o Constants.o Parser.o Strings.o
 
 #------------------------------------------------------------------------------
 
@@ -21,7 +21,7 @@ all: $(binname)
 $(binname):	$(OBJS)
 	$(CXX) $(LDFLAGS) -o $(binname) $(OBJS) $(LDLIBS)
 
-bibf.o:	bibf.cpp bibf.hpp Bibliography.hpp DataStructure.hpp Strings.hpp
+bibf.o:	bibf.cpp bibf.hpp Bibliography.hpp Strings.hpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 Bibliography.o:	Bibliography.cpp Bibliography.hpp Constants.hpp DataStructure.hpp Parser.hpp Strings.hpp
@@ -30,10 +30,10 @@ Bibliography.o:	Bibliography.cpp Bibliography.hpp Constants.hpp DataStructure.hp
 Constants.o:	Constants.cpp Constants.hpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
-Strings.o:	Strings.cpp Strings.hpp
+Parser.o:	Parser.cpp Parser.hpp DataStructure.hpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
-Parser.o:	Parser.cpp Parser.hpp DataStructure.hpp
+Strings.o:	Strings.cpp Strings.hpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 clean:
@@ -48,3 +48,4 @@ install:	$(binname)
 
 uninstall:	
 	rm $(DESTDIR)$(bindir)/$(binname)
+
