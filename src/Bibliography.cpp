@@ -248,7 +248,7 @@ void Bibliography::create_entry()
     std::cerr << Strings::tr(Strings::OUT_CREATE_ENTRY_REQ);
     ask_for_fields(bEn, required);
   }
-  else {
+  else if (optional.empty()) {
     std::cerr << Strings::tr(Strings::OUT_CREATE_ENTRY_UNKNOWN);
   }
 
