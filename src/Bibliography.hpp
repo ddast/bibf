@@ -125,7 +125,7 @@ class Bibliography
     bool is_numerical(const std::string &s) const;
 
     // Do some basic consistency checking
-    bool check_consistency();
+    void check_consistency() const;
 
     // Insert line breaks into 'str' such that every line contains 'linebreak'
     // characters or less. Insert 'intend' before every new line.
@@ -136,7 +136,7 @@ class Bibliography
     void ask_for_fields(bibEntry &bEn, const std::vector<std::string> &fields)
       const;
 
-    // Delete redundant entries
+    // Delete redundant entries, i.e. entrys that are a subset of another entry
     void delete_redundant_entries();
 
 };

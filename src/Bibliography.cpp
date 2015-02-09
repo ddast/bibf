@@ -92,6 +92,7 @@ void Bibliography::print_bib(std::ostream &os) const
 void Bibliography::print_bib(std::vector<std::string> only,
     std::ostream &os) const
 {
+  check_consistency();
   bool print_all = only.empty();
   // convert list to lowercase
   if (!print_all)
@@ -221,8 +222,7 @@ void Bibliography::add(std::istream &is)
   // add the stream to the bibliography
   parser.add(is, *bib);
 
-  // do a consistency check
-  check_consistency();
+  delete_redundant_entries();
 }
 
 
@@ -326,19 +326,20 @@ void Bibliography::ask_for_fields(bibEntry &bEn,
 }
 
 
-bool Bibliography::check_consistency()
+void Bibliography::check_consistency() const
 {
-  // return true if the bibliography is consistent else false
-  bool is_consistent = true;
-
-  // check if bibliography is empty
   if (bib->empty()) {
     std::cerr << Strings::tr(Strings::ERR_EMPTY_BIB);
-    return false;
+    return;
   }
 
-  // delete redundant entries
-  delete_redundant_entries();
+  // check if keys are empty
+  for (const bibEntry& bEn : *bib) {
+    if (bEn.key.empty()) {
+        std::cerr << Strings::tr(Strings::ERR_EMPTY_KEY)
+          << get_field_value(bEn, "title") << "\"\n";
+    }
+  }
 
   // check if every key is unique
   for (auto it1 = bib->begin(), end = bib->end(); it1 != end-1; ++it1) {
@@ -346,12 +347,10 @@ bool Bibliography::check_consistency()
       if (it1->key == it2->key) {
         std::cerr << Strings::tr(Strings::ERR_DOUBLE_KEY_1) << it1->key
           << Strings::tr(Strings::ERR_DOUBLE_KEY_2);
-        is_consistent = false;
       }
     }
   }
 
-  return is_consistent;
 }
 
 
@@ -627,9 +626,7 @@ void Bibliography::abbreviate_month()
 
 void Bibliography::delete_redundant_entries()
 {
-  // remove redundant entries
   for (bibEntry &bEn: *bib) {
-    // compare to all other entries in the bib
     for (const bibEntry &cmp : *bib) {
       // do not compare to itself
       if (&bEn == &cmp) {
@@ -651,7 +648,10 @@ void Bibliography::delete_redundant_entries()
         continue;
       }
       // compare types
-      if (bEn.type != cmp.type) {
+      std::string type1(bEn.type), type2(cmp.type);
+      std::transform(type1.begin(), type1.end(), type1.begin(), ::tolower);
+      std::transform(type2.begin(), type2.end(), type2.begin(), ::tolower);
+      if (type1 != type2) {
         continue;
       }
       // if we are still here, bEn is a subset of an other entry

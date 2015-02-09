@@ -93,7 +93,8 @@ const std::array<std::string, Strings::STR_CNT> Strings::en {{
   "Giving a type is mandatory\n",
   "Bibliography is empty\n",
   "Entry with key \"",
-  "\" was deleted (redundant entry)\n"
+  "\" was deleted (redundant entry)\n",
+  "Warning: Empty key in entry with title: \""
 }};
 
 // German
@@ -162,7 +163,8 @@ const std::array<std::string, Strings::STR_CNT> Strings::de {{
   "Es muss ein BibTeX Typ angegeben werden\n",
   "Bibliothek ist leer\n",
   "Eintrag mit Schlüssel \"",
-  "\" wurde gelöscht (redundanter Eintrag)\n"
+  "\" wurde gelöscht (redundanter Eintrag)\n",
+  "Warnung: Leerer Schlüssel im Eintrag mit Titel: \""
 }};
 
 const std::array<std::array<std::string, Strings::STR_CNT>, Strings::LANG_CNT>

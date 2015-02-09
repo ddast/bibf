@@ -77,6 +77,7 @@ class Strings
       ERR_EMPTY_BIB,
       ERR_REDUNDANT_ENTRY_1,
       ERR_REDUNDANT_ENTRY_2,
+      ERR_EMPTY_KEY,
       STR_CNT
     };
 
