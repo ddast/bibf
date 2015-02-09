@@ -337,7 +337,7 @@ bool Bibliography::check_consistency()
     return false;
   }
 
-  //delete redundant entries
+  // delete redundant entries
   delete_redundant_entries();
 
   // check if every key is unique

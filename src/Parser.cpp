@@ -126,7 +126,13 @@ std::istream& Parser::get_bibEntry(std::istream& is, bibEntry& bEn) const
   std::stringstream bEn_ss(bEn_s);
 
   // create bibEntry
+  auto old_position = bEn_ss.tellg();
   std::getline(bEn_ss, bEn.key, ',');
+  bEn.key = clean_string(bEn.key);
+  if (bEn.key.find('=') != std::string::npos) {
+    bEn.key = "";
+    bEn_ss.seekg(old_position);
+  }
   while (true) {
     std::string bEl_s;
     bool last(false);
