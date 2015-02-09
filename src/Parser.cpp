@@ -118,6 +118,7 @@ std::istream& Parser::get_bibEntry(std::istream& is, bibEntry& bEn) const
 
   // get type
   std::getline(is, bEn.type, '{');  
+  bEn.type = clean_string(bEn.type);
 
   // save block in stringstream
   std::string bEn_s;
