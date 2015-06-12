@@ -16,6 +16,8 @@ OBJS=bibf.o Bibliography.o Constants.o Parser.o Strings.o
 
 #------------------------------------------------------------------------------
 
+.PHONY: all clean distclean install uninstall
+
 all: $(binname)
 
 $(binname):	$(OBJS)
