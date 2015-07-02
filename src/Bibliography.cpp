@@ -167,32 +167,36 @@ void Bibliography::print_bib(std::vector<std::string> only,
 std::string Bibliography::break_string(std::string str,
     const std::string &intend) const
 {
-  // store each line in a vector
   std::vector<std::string> lines;
-  // break until 'str' is small enough
-  while (str.length() > linebreak) {
-    // find the first space before linebreak
-    for (unsigned int i = linebreak; i > 0; --i) {
+  bool unbreakable = false;
+  size_t minlen = intend.size();
+  while ((str.length() > linebreak) && !unbreakable) {
+    for (unsigned int i = linebreak; i >= minlen; --i) {
       if (str[i] == ' ') {
-        // replace it with a line break
         str[i] = '\n';
-        // store line including line break in 'lines'
-        lines.push_back(str.substr(0,i+1));
-        // delete the line in 'str'
-        str.erase(0,i+1);
-        // add 'intend' to the beginning
+        lines.push_back(str.substr(0, i+1));
+        str.erase(0, i+1);
         str = intend + str;
-        // exit for loop
+        break;
+      }
+      if ( i == minlen ) {
+        size_t found = str.find(' ', linebreak);
+        if (found == std::string::npos) {
+          unbreakable = true;
+          break;
+        }
+        str[found] = '\n';
+        lines.push_back(str.substr(0, found+1));
+        str.erase(0, found+1);
+        str = intend + str;
         break;
       }
     }
   }
 
-  // create one string containing all lines
   std::string result("");
   for (const std::string &l: lines)
     result += l;
-  // don't forget the rest in str
   result += str;
   return result;
 }
