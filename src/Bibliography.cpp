@@ -51,7 +51,7 @@ std::string Bibliography::clean_key(std::string key) const
 std::string Bibliography::get_lastname(std::string author) const
 {
   // get the first author
-  size_t found = author.find("and");
+  size_t found = author.find(" and ");
   if (found != std::string::npos)
     author = author.substr(0, found);
 
