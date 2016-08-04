@@ -74,18 +74,19 @@ std::istream& Parser::get_unnested(std::istream& is, std::string& str) const
   std::stringstream unnested;
   int depth(0);
   bool use_quotes = false;
+  bool is_escaped = false;
 
   // iterate over all characters
   for (char c; is.get(c);) {
 
     // a leading quotation mark increases the depth, an ending one decreases it
-    if (c == '"') {
+    if (c == '"' && !is_escaped) {
       if (depth == 0) {
         ++depth;
         use_quotes = true;
       }
       else if ( (depth == 1) && (use_quotes) ) {
-       --depth;
+        --depth;
       }
     }
 
@@ -100,6 +101,13 @@ std::istream& Parser::get_unnested(std::istream& is, std::string& str) const
     // stop if we are at depth zero and a comma is found
     else if ((c == ',') && !depth) {
       break;
+    }
+
+    // save if escape character is used
+    if (c == '\\') {
+      is_escaped = true;
+    } else {
+      is_escaped = false;
     }
 
     // add character to unnested
@@ -160,8 +168,13 @@ std::istream& Parser::get_bibEntry(std::istream& is, bibEntry& bEn) const
     std::getline(bEl_ss, tmp, delim);
     if (delim == '{')
       get_block(bEl_ss, bEl.value);
-    else if (delim == '"')
-      std::getline(bEl_ss, bEl.value, delim);
+    else if (delim == '"') {
+      std::getline(bEl_ss, bEl.value);
+      auto pos = bEl.value.find_last_of(delim);
+      if (pos != std::string::npos) {
+        bEl.value = bEl.value.substr(0, pos);
+      }
+    }
     else {
       bEl_ss.unget();
       std::getline(bEl_ss, bEl.value);
