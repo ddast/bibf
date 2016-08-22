@@ -146,9 +146,13 @@ std::istream& Parser::get_bibEntry(std::istream& is, bibEntry& bEn) const
     bool last(false);
     // get one line ending with ',' however last line may not end with ','
     if (!get_unnested(bEn_ss, bEl_s)) {
-      if (clean_string(bEl_s).empty()) break;
-      else last = true;
+      if (bEl_s.empty()) {
+        break;
+      } else {
+        last = true;
+      }
     }
+    bEl_s = clean_string(bEl_s);
     // extract element
     std::stringstream bEl_ss(bEl_s);
     bibElement bEl;
@@ -166,9 +170,9 @@ std::istream& Parser::get_bibEntry(std::istream& is, bibEntry& bEn) const
     }
     // value may be in {} or "" or without delimiter
     std::getline(bEl_ss, tmp, delim);
-    if (delim == '{')
+    if (delim == '{') {
       get_block(bEl_ss, bEl.value);
-    else if (delim == '"') {
+    } else if (delim == '"') {
       std::getline(bEl_ss, bEl.value);
       auto pos = bEl.value.find_last_of(delim);
       if (pos != std::string::npos) {
