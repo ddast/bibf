@@ -143,16 +143,12 @@ std::istream& Parser::get_bibEntry(std::istream& is, bibEntry& bEn) const
   }
   while (true) {
     std::string bEl_s;
-    bool last(false);
     // get one line ending with ',' however last line may not end with ','
-    if (!get_unnested(bEn_ss, bEl_s)) {
-      if (bEl_s.empty()) {
-        break;
-      } else {
-        last = true;
-      }
-    }
+    bool last = !get_unnested(bEn_ss, bEl_s);
     bEl_s = clean_string(bEl_s);
+    if (last && bEl_s.empty()) {
+      break;
+    }
     // extract element
     std::stringstream bEl_ss(bEl_s);
     bibElement bEl;
