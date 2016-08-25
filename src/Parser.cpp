@@ -33,13 +33,12 @@ void Parser::add(std::istream &is, std::vector<bibEntry> &bib)
 
 std::string Parser::clean_string(std::string str) const
 {
-  // Remove the characters \f, \n, \r, \t, \v
-  auto del_from = std::remove_if(str.begin(), str.end(),
-      [] (char c) -> bool { return (isspace(c) && c != ' '); });
-  str.erase(del_from, str.end());
+  // Replace the characters \f, \n, \r, \t, \v with spaces
+  std::replace_if(str.begin(), str.end(),
+      [] (char c) -> bool { return (isspace(c) && c != ' '); }, ' ');
 
   // Remove double spaces
-  del_from = std::unique(str.begin(), str.end(),
+  auto del_from = std::unique(str.begin(), str.end(),
       [] (char c1, char c2) { return (c1 == c2 && c1 == ' '); } );
   str.erase(del_from, str.end());
 
